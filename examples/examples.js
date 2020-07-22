@@ -1,5 +1,6 @@
 const formBuilder = new FormBuilder();
 formBuilder.addGroup("login", {});
 setTimeout(function (){
-    console.log(formBuilder.getInput("login0"));
-}, 10000);
+    formBuilder.deleteLine("login0", 2);
+    log("rerendered")
+}, 5000);
