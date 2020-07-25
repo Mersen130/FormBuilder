@@ -20,7 +20,8 @@ const loginStyle = {
 
     line0: [{
         tag: "input",
-        name: "Username",
+        type: "textarea",
+        name: "haha",
 
     }],
 
@@ -45,31 +46,79 @@ const loginStyle = {
         tag: "select",
         name: "Languagesad",
         options: ["--select--", "JavaScript", "Python", "C++"],
+    },{
+        tag: "input",
+        type: "text",
+        name: "foo"
+    },{
+        tag: "input",
+        type: "text",
+        name: "foo"
+    },{
+        tag: "input",
+        type: "text",
+        name: "foo"
+    },{
+        tag: "input",
+        type: "text",
+        name: "foo"
     }]
 
 }
 
 const signupStyle = {
-    useCss: true,
-    useLabel: true,
-    useCheck: true,
+    useCss: true,  // whether to apply the default css style for every element in this formGroup
+    useLabel: true,  // whether to enable labels for each element
+    useCheck: false,  // whether to use default input sanity check for all elements
 
-    fieldset: "wrapper",
-    numLines: 3,
-
+    fieldset: "Signup Form", // A frame which wraps all elements in this form, set to false if not needed
+    numLines: 5,  // number of rows in this form
+    customCss: false,  // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
+    // customCss: {
+    //     "width": "300px",
+    //     "height": "600px",
+    // },
 
     line0: [{
+        tag: "input",
         name: "Username",
+        type: "text",
+        placeholder: "please enter your username...",
         tooltip: "a name",
     }],
     line1: [{
-        name: "Password",
-        tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",
-        regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),
-        check: passwordCheck,
+        tag: "input",  // html tag, necessary field
+        name: "Password", // name for the label, necessary field even if label is disabled
+        type: "text",  // tag type, necessary field
+        placeholder: "please enter your pswd...",  // necessary field
+        value: "",  // default value, necessary field
+
+        tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",  // unnecessary field
+        regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),  // unnecessary field
+        check: passwordCheck,  // input sanity check, can be disabled by setting useCheck to false, unnecessary field
+        on: false,  // a list of events that listens to, parallel list with "callbacks", unnecessary field TODO
+        callbacks: [],  // a list of functions that execute when events are triggered, parallel list with "on", unnecessary field
     }],
     line2: [{
-        name: "Confirm Password",
+        tag: "input",
+        name: "Confirm\ Password",
+        type: "text",
+        placeholder: "please enter your pswd again...",
+        value: "something..."
+    }],
+    line3: [{
+        tag: "input",
+        name: "Birthday",
+        type: "date",
+        placeholder: "",
+        value: "",
+    }],
+    line4: [{
+        tag: "input",
+        name: "",
+        type: "submit",
+        placeholder: "",
+        value: "Create Account",
     }]
 }
 
@@ -98,28 +147,29 @@ function styleSanityCheck(style) {
 // Objects
 // model of MVC pattern
 function FormBuilder() {
-    this.formGroups = {};  // id-value pairs of FormGroups, defined below
-    this.lastAdded = "";
+    this.formGroups = {};  // formId-formGroup pairs of FormGroups, defined below
+    this.lastAdded = "";  // the formId of the newly created formGroup
 }
 
 function FormGroup(type, style, formId) {
-    this.type = type;
-    this.style = style;
-    this.formId = formId;
-    this.forms = [];  // array of forms
+    this.type = type;  // the type of this formGroup, e.g: login, signup...
+    this.style = style;  // the style object, which holds all information of a form group, explained below
+    this.formId = formId;  // the formId of this form which help FormBuilder.js create and identify this formGroup, IMPORTANT NOTE: this formId is not the same as the id of DOM element and cannot be used as a css selector!
+    this.forms = [];  // array of forms, unused for now.
     this.render(style, this.forms, formId);
-
 }
 
 
 // API starts
 // controller of MVC pattern
+
+// unless the method is requiring data, all methods of FormBuilder will return <this>
 FormBuilder.prototype = {
 
     /**
      * Add a formGroup to the window.
      * 
-     * types are limited to login, signup, mediaPost... (see handout for detail)
+     * if type provided is not recongnizable, type is treated as a custom type.
      * 
      * @returns a submit button dom element
      */
@@ -128,9 +178,11 @@ FormBuilder.prototype = {
 
         const formId = type + Object.keys(this.formGroups).length.toString();
         if (jQuery.isEmptyObject(style)) {
-            style = eval(type + "Style")  // get predefined styles for this type
+            // deepcopy predefined styles for this type
+            jQuery.extend(true, style, eval(type + "Style"))
 
         } else {
+            jQuery.extend(true, style, eval(type + "Style"))
             style = mergeStyle(eval(type + "Style"), style);  // TODO
         }
 
@@ -140,7 +192,7 @@ FormBuilder.prototype = {
 
         this.formGroups[formId] = new FormGroup(type, style, formId);
         this.lastAdded = formId;
-        return document.getElementsByClassName(`${formId}Submit`)[0];
+        return formId;
     },
 
     /**
@@ -148,6 +200,16 @@ FormBuilder.prototype = {
      */
     getLastAdded: function () {
         return this.lastAdded;
+    },
+
+    /**
+     * use jquery selector to select the form specified by formId;
+     * if formId doesn't exist, select nothing
+     * 
+     * @param {string} formId 
+     */
+    selectForm: function(formId){
+        return $(`#${formId}Form`);
     },
 
     /**
@@ -175,6 +237,7 @@ FormBuilder.prototype = {
     removeForm: function (formId) {
         $(`#${formId}Div`).remove();
         delete this.formGroups[formId];
+        return this;
     },
 
     /**
@@ -186,6 +249,7 @@ FormBuilder.prototype = {
             $(`#${formId}Div`).remove();
             delete this.formGroups[formId];
         }
+        return this;
     },
 
     /**
@@ -199,6 +263,7 @@ FormBuilder.prototype = {
         const buf = this.formGroups[formId];
         $(`#${formId}Div`).remove();
         buf.rerender();
+        return this;
     },
 
     /**
@@ -212,6 +277,21 @@ FormBuilder.prototype = {
     appendLine: function (formId, lineStyle) {
         this.formGroups[formId].appendLine(lineStyle);
         this.rerender(formId);
+        return this;
+    },
+
+    /**
+     * insert a new line at the given position of the formGroup specified by formId
+     * 
+     * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
+     * 
+     * @param {string} formId 
+     * @param {Object} lineStyle 
+     */
+    insertLine: function (formId, lineNum, lineStyle){
+        this.formGroups[formId].insertLine(lineNum, lineStyle);
+        this.rerender(formId);
+        return this;
     },
 
     /**
@@ -225,6 +305,37 @@ FormBuilder.prototype = {
     deleteLine: function (formId, lineNum) {
         this.formGroups[formId].deleteLine(lineNum);
         this.rerender(formId);
+        return this;
+    },
+
+    /**
+     * get the style object of the given form
+     * return an empty object if form doesn't exist
+     * 
+     * a handy function for debug purpose
+     * @param {string} formId 
+     */
+    getStyle: function(formId){
+        const form = this.formGroups[formId];
+        if (form){
+            return form.style;
+        }
+        return {};  // return an empty object if DNE
+    },
+
+    /**
+     * make the <elementNum>th element of the <lineNum>th line of <formId> listen to <event>
+     * @param {string} formId 
+     * @param {number} lineNum 
+     * @param {number} elementNum 
+     * @param {string} event 
+     * @param {function} callback 
+     */
+    onEvent: function(formId, lineNum, elementNum, event, callback){
+        const form = this.formGroups[formId];
+        form.onEvent(lineNum, elementNum, event, callback);
+        this.rerender(formId);
+        return this;
     }
 
     // TODO
@@ -253,43 +364,44 @@ FormGroup.prototype = {
             renderLine(`line${i}`, style[`line${i}`], formId, mainComponent, style);  // render each line
         }
 
-        const submit = `<input class='${formId}Submit' type='submit' value='Submit'>`
-        mainComponent.append(submit);
-        if (!style.useCss) {
-            return;
+        if (style.useCss) {
+            $('.' + formId + 'Input').css({
+                // "width": "100%",
+                "padding": "12px 20px",
+                "margin-top": "8px",
+                "margin-bottom": "8px",
+                "display": "inline-block",
+                "border": "1px solid #ccc",
+                "border-radius": "4px",
+                "box-sizing": "border-box",
+            });
+    
+            $(`.${formId}Submit`).css({
+                "width": "100%",
+                "background-color": "#4CAF50",
+                "color": "white",
+                "padding": "14px 20px",
+                "margin": "8px 0",
+                "border": "none",
+                "border-radius": "4px",
+                "cursor": "pointer"
+            });
+    
+            // $(`.${formId}Submit:hover`).css("background-color", "#45a049");
+    
+            $(`#${formId}Form`).css({
+                "margin": "auto",
+                "max-width": "50%",
+                "border-radius": "5px",
+                "background-color": "#f2f2f2",
+                "padding": "20px",
+            });    
+            
         }
 
-        $('.' + formId + 'Input').css({
-            // "width": "100%",
-            "padding": "12px 20px",
-            "margin-top": "8px",
-            "margin-bottom": "8px",
-            "display": "inline-block",
-            "border": "1px solid #ccc",
-            "border-radius": "4px",
-            "box-sizing": "border-box",
-        });
-
-        $(`.${formId}Submit`).css({
-            "width": "100%",
-            "background-color": "#4CAF50",
-            "color": "white",
-            "padding": "14px 20px",
-            "margin": "8px 0",
-            "border": "none",
-            "border-radius": "4px",
-            "cursor": "pointer"
-        });
-
-        // $(`.${formId}Submit:hover`).css("background-color", "#45a049");
-
-        $(`#${formId}Form`).css({
-            "margin": "auto",
-            "max-width": "30%",
-            "border-radius": "5px",
-            "background-color": "#f2f2f2",
-            "padding": "20px",
-        });
+        if (style.customCss){
+            $(`#${formId}Form`).css(style.customCss);
+        }
 
     },
 
@@ -303,6 +415,17 @@ FormGroup.prototype = {
         this.style.numLines++;
     },
 
+    insertLine: function(lineNum, lineStyle){
+        for (let line = this.style.numLines-1; line >= lineNum-1; line--) {
+            const old_key = `line${line}`;
+            const new_key = `line${line + 1}`;
+            this.style[new_key] = this.style[old_key];
+            delete this.style[old_key];
+        }
+        this.style.numLines++;
+        this.style[`line${lineNum-1}`] = lineStyle;
+    },
+
     deleteLine: function (lineNum) {
         delete this.style[`line${lineNum - 1}`];
 
@@ -314,6 +437,17 @@ FormGroup.prototype = {
         }
         this.style.numLines--;
 
+    },
+
+    onEvent: function(lineNum, elementNum, event, callback){
+        const currElement = this.style[`line${lineNum-1}`][elementNum];
+        if (!currElement.on){
+            currElement.on = [event];
+            currElement.callbacks = [callback];
+        } else{
+            currElement.push(event);
+            currElement.push (callback);
+        }
     }
 
 
@@ -330,7 +464,7 @@ function renderLine(lineName, line, formId, mainComponent, style) {
     // this line contains only one element
     if (line.length === 1) {
         if (style.useLabel) {
-            const label = `<label for=${line[0].name}>${line[0].name}:</label><br>`;
+            const label = `<label for=${formId + lineName + line[0].name.split(" ").join("")}>${line[0].name && line[0].name+":"}</label><br>`;
             mainComponent.append(label)
         }
         let tag;
@@ -341,11 +475,18 @@ function renderLine(lineName, line, formId, mainComponent, style) {
         }
         mainComponent.append(tag);
 
+        // adding event listeners
+        if (line[0].on){
+            line[0].on.map((event, ind) => {
+                $(`#${formId + lineName + line[0].name.split(" ").join("")}`).on(event, line[0].callbacks[ind]);
+            })
+        }
+
         // input check
         if (style.useCheck && line[0].check) {
 
-            $(`#${formId + lineName + line[0].name}`).change(function () {
-                line[0].check(formId + lineName + line[0].name, line[0].regex)
+            $(`#${formId + lineName + line[0].name.split(" ").join("")}`).change(function () {
+                line[0].check(formId + lineName + line[0].name.split(" ").join(""), line[0].regex)
             })
         }
         $(`.${formId + lineName}`).css("width", `100%`);
@@ -360,7 +501,7 @@ function renderLine(lineName, line, formId, mainComponent, style) {
         // create labels
         if (style.useLabel) {
             line.map(element => {
-                const label = `<label class=${formId + lineName}Label for=${formId + lineName + element.name}>${element.name}:</label>`;
+                const label = `<label class=${formId + lineName}Label for=${formId + lineName + element.name.split(" ").join("")}>${element.name && element.name+":"}</label>`;
                 mainComponent.append(label);
             });
             mainComponent.append('<br>')
@@ -381,10 +522,17 @@ function renderLine(lineName, line, formId, mainComponent, style) {
 
             mainComponent.append(tag);
 
+            // adding event listeners
+            if (element.on){
+                element.on.map((event, ind) => {
+                    $(`#${formId + lineName + element.name.split(" ").join("")}`).on(event, element.callbacks[ind]);
+                })
+            }
+
             // input check
             if (style.useCheck && element.check) {
-                $(`#${formId + lineName + element.name}`).change(function () {
-                    element.check(formId + lineName + element.name, element.regex)
+                $(`#${formId + lineName + element.name.split(" ").join("")}`).change(function () {
+                    element.check(formId + lineName + element.name.split(" ").join(""), element.regex)
                 })
             }
 
@@ -404,7 +552,7 @@ function renderLine(lineName, line, formId, mainComponent, style) {
 
 
 function getSelectString(lineName, line, formId, style) {
-    let tag = `<select name='${line.name}' class='${formId}Input ${formId + lineName}'>`
+    let tag = `<select name='${line.name.split(" ").join("")}' id='${formId + lineName + line.name.split(" ").join("")}' class='${formId}Input ${formId + lineName}'>`
     tag += line.options.slice(1).reduce((accum, val) =>
         accum + `<option value="${val}">${val}</option>`, `<option value="${line.options[0]}">${line.options[0]}</option>`
     );
@@ -413,7 +561,12 @@ function getSelectString(lineName, line, formId, style) {
 }
 
 function getInputString(lineName, line, formId, style) {
-    let tag = `<input class='${formId}Input ${formId + lineName}' type='text' placeholder='${line.name}' id=${formId + lineName + line.name} name=${line.name}>`
+    let tag;
+    if (line.type === "submit"){
+        tag = `<input class='${formId}Submit' id='${formId + lineName + line.name.split(" ").join("")}' type='submit' value='${line.value}'>`
+    } else{
+        tag = `<input class='${formId}Input ${formId + lineName}' type='${line.type}' ${line.placeholder && ("placeholder='"+line.placeholder+"'")} id='${formId + lineName + line.name.split(" ").join("")}' name='${line.name.split(" ").join("")}' ${line.value && "value='"+line.value+"'"}>`
+    }
     if (line.tooltip) {
         tag = `<div class=${"tooltip" + formId + lineName}>` + tag + `<span class="tooltiptext${formId + lineName}">${line.tooltip}</span></div>`
     }
