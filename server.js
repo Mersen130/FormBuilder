@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 	//res.send('This should be the root route!')
 
 	//sending some HTML
-	res.sendFile(path.join(__dirname + '/examples.html'));
+	res.sendFile(path.join(__dirname + '/pub/examples.html'));
 })
 
 // will use an 'environmental variable', process.env.PORT, for deployment.
