@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/csc309-summer-2020/js-library-yeqixin/issues"
   },
-  "homepage": "https://github.com/csc309-summer-2020/js-library-yeqixin#readme"
+  "homepage": "https://github.com/csc309-summer-2020/js-library-yeqixin#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
