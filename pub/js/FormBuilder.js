@@ -185,7 +185,7 @@ FormBuilder.prototype = {
      * 
      * if type provided is not recongnizable, type is treated as a custom type.
      * 
-     * @returns a submit button dom element
+     * @returns formId of this form (a string)
      */
     addGroup: function (type, style = {}) {
         // easy version of factory design pattern
