@@ -1,8 +1,6 @@
 /**
  * Source code for javascript library: FormBuilder.
  * 
- * Copying for any unauthorized purpose are strictly prohibited.
- * 
  * prerequisite: jQuery-3.5.1
  * 
  * @author Qixin Ye
@@ -17,51 +15,49 @@ const loginStyle = {
     useCss: true,
     useLabel: true,
     numLines: 4,
+    fieldset: "login",
 
     line0: [{
         tag: "input",
-        type: "textarea",
-        name: "haha",
-
+        name: "Username",
+        type: "text",
+        value: "",
+        placeholder: "please enter your username...",
     }],
 
     line1: [{
         tag: "input",
         name: "Password",
-    }, {
-        name: "Second",
-    }],
-
-    line2: [{
+        type: "text",
+        value: "",
+        placeholder: "please enter your password...",
+    },{
         tag: "input",
-        name: "Message",
-        height: "100px",
+        name: "Email",
+        type: "text",
+        value: "",
+        placeholder: "123456@example.com",
+    }, {
+        tag: "input",
+        name: "Verification code",
+        type: "text",
+        value: "",
+        placeholder: "please enter your verification code...",
     }],
-
-    line3: [{
+    line2: [{
         tag: "select",
         name: "Language",
-        options: ["--select--", "JavaScript", "Python", "C++"],
-    }, {
-        tag: "select",
-        name: "Languagesad",
-        options: ["--select--", "JavaScript", "Python", "C++"],
-    },{
+        type: "",
+        placeholder: "",
+        value: "",
+        options: ["--select--", "English", "French", "Chinese"],
+    }],
+    line3: [{
         tag: "input",
-        type: "text",
-        name: "foo"
-    },{
-        tag: "input",
-        type: "text",
-        name: "foo"
-    },{
-        tag: "input",
-        type: "text",
-        name: "foo"
-    },{
-        tag: "input",
-        type: "text",
-        name: "foo"
+        name: "",
+        type: "submit",
+        placeholder: "",
+        value: "Login",
     }]
 
 }
@@ -69,7 +65,7 @@ const loginStyle = {
 const signupStyle = {
     useCss: true,  // whether to apply the default css style for every element in this formGroup
     useLabel: true,  // whether to enable labels for each element
-    useCheck: false,  // whether to use default input sanity check for all elements
+    useCheck: true,  // whether to use default input sanity check for all elements
 
     fieldset: "Signup Form", // A frame which wraps all elements in this form, set to false if not needed
     numLines: 5,  // number of rows in this form
@@ -84,6 +80,7 @@ const signupStyle = {
         name: "Username",
         type: "text",
         placeholder: "please enter your username...",
+        value: "",
         tooltip: "a name",
     }],
     line1: [{
@@ -104,7 +101,9 @@ const signupStyle = {
         name: "Confirm\ Password",
         type: "text",
         placeholder: "please enter your pswd again...",
-        value: "something..."
+        value: "something...",
+        regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),
+        check: passwordCheck,
     }],
     line3: [{
         tag: "input",
@@ -159,6 +158,21 @@ function FormGroup(type, style, formId) {
     this.render(style, this.forms, formId);
 }
 
+/**
+ * an incomplete version of mergestyle
+ * @param {*} dst 
+ * @param {*} src 
+ */
+function mergeStyle(dst, src){
+    if ("useCss" in src) dst.useCss = src.useCss;
+    if ("useLabel" in src) dst.useLabel = src.useLabel;
+    if ("fieldset" in src) dst.fieldset = src.fieldset;
+    if ("customCss" in src) dst.customCss = src.customCss;
+    if ("useCheck" in src) dst.useCheck = src.useCheck;
+    return dst;
+    // TODO complete this function
+}
+
 
 // API starts
 // controller of MVC pattern
@@ -177,14 +191,22 @@ FormBuilder.prototype = {
         // easy version of factory design pattern
 
         const formId = type + Object.keys(this.formGroups).length.toString();
-        if (jQuery.isEmptyObject(style)) {
-            // deepcopy predefined styles for this type
-            jQuery.extend(true, style, eval(type + "Style"))
+        const builtinStyle = eval(type + "Style");
+        let temp = {};
+        if (!builtinStyle){
+            temp = initEmptyStyle();
+            style = mergeStyle(temp, style)
+        } else{
+            if (jQuery.isEmptyObject(style)) {
+                // deepcopy predefined styles for this type
+                jQuery.extend(true, style, builtinStyle)
 
-        } else {
-            jQuery.extend(true, style, eval(type + "Style"))
-            style = mergeStyle(eval(type + "Style"), style);  // TODO
+            } else {
+                jQuery.extend(true, temp, builtinStyle)
+                style = mergeStyle(temp, style);  // TODO
+            }
         }
+        
 
         if (!styleSanityCheck(style)) {
             throw new TypeError("Style format incorrect");
