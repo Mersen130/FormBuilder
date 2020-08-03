@@ -100,11 +100,11 @@ const signupStyle = {
         placeholder: "please enter your pswd...",  // necessary field
         value: "",  // default value, necessary field
 
-        tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",  // unnecessary field
-        regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),  // unnecessary field
-        check: passwordCheck,  // input sanity check, can be disabled by setting useCheck to false, unnecessary field
-        on: false,  // a list of events that listens to, parallel list with "callbacks", unnecessary field TODO
-        callbacks: [],  // a list of functions that execute when events are triggered, parallel list with "on", unnecessary field
+        tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",  // optional field
+        regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),  // optional field
+        check: passwordCheck,  // input sanity check, can be disabled by setting useCheck to false, optional field
+        on: false,  // a list of events that listens to, parallel list with "callbacks", optional field TODO
+        callbacks: [],  // a list of functions that execute when events are triggered, parallel list with "on", optional field
     }],
     line2: [{
         tag: "input",
@@ -292,9 +292,9 @@ FormBuilder.prototype = {
      * @param {string} formId 
      */
     rerender: function (formId) {
-        const buf = this.formGroups[formId];
+        const form = this.formGroups[formId];
         $(`#${formId}Div`).remove();
-        buf.rerender();
+        form.rerender();
         return this;
     },
 
@@ -307,7 +307,11 @@ FormBuilder.prototype = {
      * @param {Object} lineStyle 
      */
     appendLine: function (formId, lineStyle) {
-        this.formGroups[formId].appendLine(lineStyle);
+        const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
+        form.appendLine(lineStyle);
         this.rerender(formId);
         return this;
     },
@@ -321,7 +325,11 @@ FormBuilder.prototype = {
      * @param {Object} lineStyle 
      */
     insertLine: function (formId, lineNum, lineStyle){
-        this.formGroups[formId].insertLine(lineNum, lineStyle);
+        const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
+        form.insertLine(lineNum, lineStyle);
         this.rerender(formId);
         return this;
     },
@@ -335,7 +343,11 @@ FormBuilder.prototype = {
      * @param {Object} lineStyle 
      */
     deleteLine: function (formId, lineNum) {
-        this.formGroups[formId].deleteLine(lineNum);
+        const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
+        form.deleteLine(lineNum);
         this.rerender(formId);
         return this;
     },
@@ -365,16 +377,73 @@ FormBuilder.prototype = {
      */
     onEvent: function(formId, lineNum, elementNum, event, callback){
         const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
         form.onEvent(lineNum, elementNum, event, callback);
+        this.rerender(formId);
+        return this;
+    },
+
+    /**
+     * append a new element at the end of the line of the formGroup specified by formId
+     * 
+     * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
+     * 
+     * @param {string} formId 
+     * @param {Number} lineNum
+     * @param {Object} elementStyle 
+     */
+     appendElementAtLine: function(formId, lineNum, elementStyle){
+        const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
+        form.appendElementAtLine(lineNum, elementStyle);
+        thie.rerender(formId);
+        return this;
+    },
+
+    /**
+     * insert a new element at the elementNum of the line of the formGroup specified by formId
+     * 
+     * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
+     * 
+     * @param {string} formId 
+     * @param {Number} lineNum
+     * @param {Number} elementNum
+     * @param {Object} elementStyle 
+     */
+    insertElementAtLine: function(formId, lineNum, elementNum, elementStyle){
+        const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
+        form.insertElementAtLine(lineNum, elementNum, elementStyle);
+        this.rerender(formId);
+        return this;
+    },
+
+    /**
+     * delete an element at the elementNum of the line of the formGroup specified by formId
+     * 
+     * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
+     * 
+     * @param {string} formId 
+     * @param {Number} lineNum
+     * @param {Number} elementNum
+     */
+    deleteElementAtLine: function(formId, lineNum, elementNum){
+        const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
+        form.deleteElementAtLine(lineNum, elementNum);
         this.rerender(formId);
         return this;
     }
 
-    appendElementAtLine: function(){}
 
-    insertElementAtLine: function(){}
-
-    
 
     // TODO
 }
@@ -454,20 +523,20 @@ FormGroup.prototype = {
     },
 
     insertLine: function(lineNum, lineStyle){
-        for (let line = this.style.numLines-1; line >= lineNum-1; line--) {
+        for (let line = this.style.numLines-1; line >= lineNum; line--) {
             const old_key = `line${line}`;
             const new_key = `line${line + 1}`;
             this.style[new_key] = this.style[old_key];
             delete this.style[old_key];
         }
         this.style.numLines++;
-        this.style[`line${lineNum-1}`] = lineStyle;
+        this.style[`line${lineNum}`] = lineStyle;
     },
 
     deleteLine: function (lineNum) {
-        delete this.style[`line${lineNum - 1}`];
+        delete this.style[`line${lineNum}`];
 
-        for (let line = lineNum; line < this.style.numLines; line++) {
+        for (let line = lineNum + 1; line < this.style.numLines; line++) {
             const old_key = `line${line}`;
             const new_key = `line${line - 1}`;
             this.style[new_key] = this.style[old_key];
@@ -478,7 +547,7 @@ FormGroup.prototype = {
     },
 
     onEvent: function(lineNum, elementNum, event, callback){
-        const currElement = this.style[`line${lineNum-1}`][elementNum];
+        const currElement = this.style[`line${lineNum}`][elementNum];
         if (!currElement.on){
             currElement.on = [event];
             currElement.callbacks = [callback];
@@ -486,8 +555,22 @@ FormGroup.prototype = {
             currElement.push(event);
             currElement.push (callback);
         }
-    }
+    },
 
+    appendElementAtLine: function(lineNum, elementStyle){
+        const lineArray = this.style[`line${lineNum}`];
+        lineArray.append(elementStyle);
+    },
+
+    insertElementAtLine: function(lineNum, elementNum, elementStyle){
+        const lineArray = this.style[`line${lineNum}`];
+        lineArray.splice(lineNum, 0, elementStyle);
+    },
+
+    deleteElementAtLine: function(lineNum, elementNum){
+        const lineArray = this.style[`line${lineNum}`];
+        lineArray.splice(elementNum, 1);
+    }
 
 
 

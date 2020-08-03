@@ -85,8 +85,8 @@ const emailInput = [{
 }]
 descriotion = "<p>Insert one custom line at line 2 of the form:</p>"
 formId = formBuilder.addGroup("signup", {});
-formBuilder.insertLine(formId, 2, emailInput).selectForm(formId).css({"position": "relative", "left": "250px"});
-$(`#${formId}Div`).append(`<code>${descriotion}1: const emailInput = [{name: "Email",<br>tag: "input",<br>type: "text",<br>placeholder: \"123456@example.com\",<br>value: \"\",<br>}]<br>2: formId = formBuilder.addGroup(\"signup\", {});<br>3: formBuilder.insertLine(formId, 2, emailInput);</code>`).css( {"position": "relative"});
+formBuilder.insertLine(formId, 1, emailInput).selectForm(formId).css({"position": "relative", "left": "250px"});
+$(`#${formId}Div`).append(`<code>${descriotion}1: const emailInput = [{name: "Email",<br>tag: "input",<br>type: "text",<br>placeholder: \"123456@example.com\",<br>value: \"\",<br>}]<br>2: formId = formBuilder.addGroup(\"signup\", {});<br>3: formBuilder.insertLine(formId, 1, emailInput);</code>`).css( {"position": "relative"});
 formatLastCode();
 
 body.append("<hr>")
