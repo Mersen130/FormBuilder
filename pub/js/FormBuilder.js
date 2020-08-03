@@ -14,7 +14,7 @@ const log = console.log;
 const loginStyle = {
     useCss: true,
     useLabel: true,
-    numLines: 4,
+    numLines: 5,
     fieldset: "login",
 
     line0: [{
@@ -28,13 +28,13 @@ const loginStyle = {
     line1: [{
         tag: "input",
         name: "Password",
-        type: "text",
+        type: "password",
         value: "",
         placeholder: "please enter your password...",
     },{
         tag: "input",
         name: "Email",
-        type: "text",
+        type: "email",
         value: "",
         placeholder: "123456@example.com",
     }, {
@@ -45,12 +45,15 @@ const loginStyle = {
         placeholder: "please enter your verification code...",
     }],
     line2: [{
-        tag: "select",
-        name: "Language",
+        tag: "textarea",
+        name: "Descirption",
         type: "",
-        placeholder: "",
         value: "",
-        options: ["--select--", "English", "French", "Chinese"],
+        placeholder: "",
+        attributes: {
+            rows: "4",
+            cols: "50",
+        },
     }],
     line3: [{
         tag: "input",
@@ -58,6 +61,13 @@ const loginStyle = {
         type: "submit",
         placeholder: "",
         value: "Login",
+    }],
+    line4: [{
+        tag: "input",
+        name: "Remember me",
+        type: "checkbox",
+        value: "",
+        width: "2%",
     }]
 
 }
@@ -86,7 +96,7 @@ const signupStyle = {
     line1: [{
         tag: "input",  // html tag, necessary field
         name: "Password", // name for the label, necessary field even if label is disabled
-        type: "text",  // tag type, necessary field
+        type: "password",  // tag type, necessary field
         placeholder: "please enter your pswd...",  // necessary field
         value: "",  // default value, necessary field
 
@@ -99,7 +109,7 @@ const signupStyle = {
     line2: [{
         tag: "input",
         name: "Confirm\ Password",
-        type: "text",
+        type: "password",
         placeholder: "please enter your pswd again...",
         value: "something...",
         regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),
@@ -360,6 +370,12 @@ FormBuilder.prototype = {
         return this;
     }
 
+    appendElementAtLine: function(){}
+
+    insertElementAtLine: function(){}
+
+    
+
     // TODO
 }
 
@@ -483,48 +499,15 @@ FormGroup.prototype = {
 // helper functions
 // view of MVC pattern
 function renderLine(lineName, line, formId, mainComponent, style) {
-    // this line contains only one element
-    if (line.length === 1) {
-        if (style.useLabel) {
-            const label = `<label for=${formId + lineName + line[0].name.split(" ").join("")}>${line[0].name && line[0].name+":"}</label><br>`;
-            mainComponent.append(label)
-        }
-        let tag;
-        if (line[0].tag === "select") {
-            tag = getSelectString(lineName, line[0], formId, style);
-        } else {
-            tag = getInputString(lineName, line[0], formId, style);
-        }
-        mainComponent.append(tag);
-
-        // adding event listeners
-        if (line[0].on){
-            line[0].on.map((event, ind) => {
-                $(`#${formId + lineName + line[0].name.split(" ").join("")}`).on(event, line[0].callbacks[ind]);
-            })
-        }
-
-        // input check
-        if (style.useCheck && line[0].check) {
-
-            $(`#${formId + lineName + line[0].name.split(" ").join("")}`).change(function () {
-                line[0].check(formId + lineName + line[0].name.split(" ").join(""), line[0].regex)
-            })
-        }
-        $(`.${formId + lineName}`).css("width", `100%`);
-
-        // tooltip style
-        if (line[0].tooltip && style.useCss) {
-            addTooltipCss(formId, lineName);
-        }
-    } else {
         // this line contains multiple elements
 
         // create labels
         if (style.useLabel) {
             line.map(element => {
-                const label = `<label class=${formId + lineName}Label for=${formId + lineName + element.name.split(" ").join("")}>${element.name && element.name+":"}</label>`;
-                mainComponent.append(label);
+                if (style.useLabel && element.type !== "radio" && element.type !== "checkbox") {
+                    const label = `<label class=${formId + lineName}Label for=${formId + lineName + element.name.split(" ").join("")}>${element.name && element.name+":"}</label>`;
+                    mainComponent.append(label);
+                }
             });
             mainComponent.append('<br>')
 
@@ -565,16 +548,25 @@ function renderLine(lineName, line, formId, mainComponent, style) {
         });
         const lineInput = $(`.${formId + lineName}`)
         // add space btwn elements
-        lineInput.css({ "width": `${100 / line.length - 1}%`, "display": "inline-block" });
-        lineInput.not(':last').css("margin-right", `${line.length / (line.length - 1)}%`);
+        let width = 100;
+        if (line.length > 1){
+            width = 100 / line.length - 1;
+            lineInput.css({ "width": `${width}%`, "display": "inline-block" });
+            lineInput.not(':last').css("margin-right", `${line.length / (line.length - 1)}%`);
+        } else{
+            lineInput.css({ "width": `${width}%`, "display": "inline-block" });
+        }
 
-
+        line.map(element => {
+            if (element.width){
+                $(`#${formId + lineName + element.name.split(" ").join("")}`).css({"width": element.width})
+            }
+        });
     }
-}
 
 
 function getSelectString(lineName, line, formId, style) {
-    let tag = `<select name='${line.name.split(" ").join("")}' id='${formId + lineName + line.name.split(" ").join("")}' class='${formId}Input ${formId + lineName}'>`
+    let tag = `<select ${line.name && "name='"+line.name.split(" ").join("")+"'"} id='${formId + lineName + line.name.split(" ").join("")}' class='${formId}Input ${formId + lineName}'>`
     tag += line.options.slice(1).reduce((accum, val) =>
         accum + `<option value="${val}">${val}</option>`, `<option value="${line.options[0]}">${line.options[0]}</option>`
     );
@@ -583,11 +575,18 @@ function getSelectString(lineName, line, formId, style) {
 }
 
 function getInputString(lineName, line, formId, style) {
+    let attributes = "";
+    for (const attr in line.attributes){
+        attributes += attr + "='"+line.attributes[attr]+"' ";
+    }
     let tag;
     if (line.type === "submit"){
-        tag = `<input class='${formId}Submit' id='${formId + lineName + line.name.split(" ").join("")}' type='submit' value='${line.value}'>`
+        tag = `<${line.tag} class='${formId}Submit' id='${formId + lineName + line.name.split(" ").join("")}' type='submit' ${attributes} ${line.value && "value='"+line.value+"'"}>`
     } else{
-        tag = `<input class='${formId}Input ${formId + lineName}' type='${line.type}' ${line.placeholder && ("placeholder='"+line.placeholder+"'")} id='${formId + lineName + line.name.split(" ").join("")}' name='${line.name.split(" ").join("")}' ${line.value && "value='"+line.value+"'"}>`
+        tag = `<${line.tag} class='${formId}Input ${formId + lineName}' ${line.type && ("type='"+line.type+"'")} ${line.placeholder && ("placeholder='"+line.placeholder+"'")} id='${formId + lineName + line.name.split(" ").join("")}' ${line.name && "name='"+line.name.split(" ").join("")+"'"} ${attributes} ${line.value && "value='"+line.value+"'"}></${line.tag}>`
+    }
+    if (line.type === "checkbox" || line.type === "radio"){
+        tag += `<label for=${formId + lineName + line.name.split(" ").join("")}>${line.name}</label>`
     }
     if (line.tooltip) {
         tag = `<div class=${"tooltip" + formId + lineName}>` + tag + `<span class="tooltiptext${formId + lineName}">${line.tooltip}</span></div>`
