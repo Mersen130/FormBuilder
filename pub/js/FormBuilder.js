@@ -165,6 +165,7 @@ function styleSanityCheck(style) {
 function FormBuilder() {
     this.formGroups = {};  // formId-formGroup pairs of FormGroups, defined below
     this.lastAdded = "";  // the formId of the newly created formGroup
+    this.tabNum = 0;  // number of concatenated forms
 }
 
 function FormGroup(type, style, formId) {
@@ -241,14 +242,14 @@ FormBuilder.prototype = {
      */
     createTabForm: function(tabFormIds, parentSelector){
         // create tabs
-        let tab = "<div class='tabWrapper'><div class='tab'>";
+        let tab = `<div class='tabWrapper${this.tabNum}'><div class='tab${this.tabNum}'>`;
         for (const tabName in tabFormIds){
             const formId = tabFormIds[tabName];
             const form = this.formGroups[formId];
             if (!form){
                 continue;
             }
-            tab += `<button class='tablinks' onclick="openForm(event, '${formId}')">${tabName}</button>`
+            tab += `<button class='tablinks${this.tabNum}' onclick="openForm(event, '${formId}', ${this.tabNum})">${tabName}</button>`
         }
         tab += "</div></div>";
         const parent = $(parentSelector);
@@ -260,16 +261,16 @@ FormBuilder.prototype = {
             if (!this.formGroups[formId]){
                 continue;
             }
-            this.changeParent(formId, "div.tabWrapper").rerender(formId);
-            $(`#${formId}Div`).addClass("tabContent");
+            this.changeParent(formId, `div.tabWrapper${this.tabNum}`).rerender(formId);
+            $(`#${formId}Div`).addClass(`tabContent${this.tabNum}`);
         }
 
         // set tab css
-        const tabWrapper = $("div.tabWrapper")
-        const tabAdded = $("div.tabWrapper div.tab")
-        const tabButtons = $("div.tabWrapper div.tab button")
-        const tabButtonsActive = $("div.tabWrapper div.tab button.active");
-        const tabContents = $("div.tabWrapper div.tabContent");
+        const tabWrapper = $(`div.tabWrapper${this.tabNum}`);
+        const tabAdded = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum}`);
+        const tabButtons = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum} button`);
+        const tabButtonsActive = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum} button.active`);
+        const tabContents = $(`div.tabWrapper${this.tabNum} div.tabContent${this.tabNum}`);
 
         tabWrapper.css({"width": "50%"});
         tabAdded.css({
@@ -297,6 +298,7 @@ FormBuilder.prototype = {
             "border": "1px solid #ccc",
             "border-top": "none",
         });
+        this.tabNum++;
         return this;
     },
 
@@ -859,13 +861,13 @@ function passwordCheck(formInputId, reg) {
 }
 
 
-function openForm(evt, formId) {
+function openForm(evt, formId, tabNum) {
     let i, tabContent, tablinks;
-    tabContent = document.getElementsByClassName("tabContent");
+    tabContent = document.getElementsByClassName(`tabContent${tabNum}`);
     for (i = 0; i < tabContent.length; i++) {
       tabContent[i].style.display = "none";
     }
-    tablinks = document.getElementsByClassName("tablinks");
+    tablinks = document.getElementsByClassName(`tablinks${tabNum}`);
     for (i = 0; i < tablinks.length; i++) {
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
