@@ -16,6 +16,8 @@ const loginStyle = {
     useLabel: true,
     numLines: 5,
     fieldset: "login",
+    parentSelector: "body",
+
 
     line0: [{
         tag: "input",
@@ -77,6 +79,7 @@ const signupStyle = {
     useLabel: true,  // whether to enable labels for each element
     useCheck: true,  // whether to use default input sanity check for all elements
 
+    parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
     fieldset: "Signup Form", // A frame which wraps all elements in this form, set to false if not needed
     numLines: 5,  // number of rows in this form
     customCss: false,  // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
@@ -147,6 +150,10 @@ const questionStyle = {
 
 }
 
+const contactMeStyle = {
+    
+}
+
 function styleSanityCheck(style) {
     // TODO
     return true;
@@ -203,8 +210,8 @@ FormBuilder.prototype = {
         const formId = type + Object.keys(this.formGroups).length.toString();
         const builtinStyle = eval(type + "Style");
         let temp = {};
-        if (!builtinStyle){
-            temp = initEmptyStyle();
+        if (!builtinStyle){ // init a completely customized form
+            temp = initEmptyStyle(); // todo
             style = mergeStyle(temp, style)
         } else{
             if (jQuery.isEmptyObject(style)) {
@@ -218,13 +225,79 @@ FormBuilder.prototype = {
         }
         
 
-        if (!styleSanityCheck(style)) {
+        if (!styleSanityCheck(style)) { // check if there is any invalid fields that will damage the program
             throw new TypeError("Style format incorrect");
         }
 
-        this.formGroups[formId] = new FormGroup(type, style, formId);
+        this.formGroups[formId] = new FormGroup(type, style, formId);  // render
         this.lastAdded = formId;
         return formId;
+    },
+
+    /**
+     * Combine forms together, by putting them into a tab.
+     * 
+     * @param {Object} tabFormIds an object specify tab names and corresponding forms to combine. e.g. {"log in": "login0", "contact us": "contactus1"}
+     */
+    createTabForm: function(tabFormIds, parentSelector){
+        // create tabs
+        let tab = "<div class='tabWrapper'><div class='tab'>";
+        for (const tabName in tabFormIds){
+            const formId = tabFormIds[tabName];
+            const form = this.formGroups[formId];
+            if (!form){
+                continue;
+            }
+            tab += `<button class='tablinks' onclick="openForm(event, '${formId}')">${tabName}</button>`
+        }
+        tab += "</div></div>";
+        const parent = $(parentSelector);
+        parent.append(tab);
+
+        // move forms under the tab just created
+        for (const tabName in tabFormIds){
+            const formId = tabFormIds[tabName];
+            if (!this.formGroups[formId]){
+                continue;
+            }
+            this.changeParent(formId, "div.tabWrapper").rerender(formId);
+            $(`#${formId}Div`).addClass("tabContent");
+        }
+
+        // set tab css
+        const tabWrapper = $("div.tabWrapper")
+        const tabAdded = $("div.tabWrapper div.tab")
+        const tabButtons = $("div.tabWrapper div.tab button")
+        const tabButtonsActive = $("div.tabWrapper div.tab button.active");
+        const tabContents = $("div.tabWrapper div.tabContent");
+
+        tabWrapper.css({"width": "50%"});
+        tabAdded.css({
+            "overflow": "hidden",
+            "border": "1px solid #ccc",
+            "background-color": "#f1f1f1",
+        });
+        tabButtons.css({
+            "background-color": "inherit",
+            "float": "left",
+            "border": "none",
+            "outline": "none",
+            "cursor": "pointer",
+            "padding": "14px 16px",
+            "transition": "0.3s",
+            "font-size": "17px",
+        }).hover(function (){
+            $(this).css("background-color", "#ddd");
+        }, function (){
+            $(this).css("background-color", "inherit");
+        });
+        tabButtonsActive.css("background-color", "#ccc");
+        tabContents.css({
+            "display": "none",
+            "border": "1px solid #ccc",
+            "border-top": "none",
+        });
+        return this;
     },
 
     /**
@@ -238,7 +311,7 @@ FormBuilder.prototype = {
      * use jquery selector to select the form specified by formId;
      * if formId doesn't exist, select nothing
      * 
-     * @param {string} formId 
+     * @param {String} formId specify a form to select
      */
     selectForm: function(formId){
         return $(`#${formId}Form`);
@@ -250,7 +323,7 @@ FormBuilder.prototype = {
      * 
      * if formId doesn't exist, return an empty array
      * 
-     * @param {string} formId 
+     * @param {String} formId specify a form
      */
     getInput: function (formId) {
         const ans = [];
@@ -264,9 +337,13 @@ FormBuilder.prototype = {
      * remove the given formId from dom
      * 
      * do nothing if given formId doesn't exist
-     * @param {string} formId 
+     * @param {String} formId specify a form to remove
      */
     removeForm: function (formId) {
+        const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
         $(`#${formId}Div`).remove();
         delete this.formGroups[formId];
         return this;
@@ -289,10 +366,13 @@ FormBuilder.prototype = {
      * 
      * This method doesn't need to be manually invoked in most cases.
      * 
-     * @param {string} formId 
+     * @param {String} formId specify a form to rerender
      */
     rerender: function (formId) {
         const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
         $(`#${formId}Div`).remove();
         form.rerender();
         return this;
@@ -303,7 +383,7 @@ FormBuilder.prototype = {
      * 
      * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
      * 
-     * @param {string} formId 
+     * @param {String} formId specify a form to modify
      * @param {Object} lineStyle 
      */
     appendLine: function (formId, lineStyle) {
@@ -321,7 +401,7 @@ FormBuilder.prototype = {
      * 
      * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
      * 
-     * @param {string} formId 
+     * @param {String} formId specify a form to modify
      * @param {Object} lineStyle 
      */
     insertLine: function (formId, lineNum, lineStyle){
@@ -339,7 +419,7 @@ FormBuilder.prototype = {
      * 
      * do nothing if line/formId doesn't exist
      * 
-     * @param {string} formId 
+     * @param {String} formId specify a form to modify
      * @param {Object} lineStyle 
      */
     deleteLine: function (formId, lineNum) {
@@ -357,7 +437,7 @@ FormBuilder.prototype = {
      * return an empty object if form doesn't exist
      * 
      * a handy function for debug purpose
-     * @param {string} formId 
+     * @param {String} formId specify a form
      */
     getStyle: function(formId){
         const form = this.formGroups[formId];
@@ -369,11 +449,11 @@ FormBuilder.prototype = {
 
     /**
      * make the <elementNum>th element of the <lineNum>th line of <formId> listen to <event>
-     * @param {string} formId 
-     * @param {number} lineNum 
-     * @param {number} elementNum 
-     * @param {string} event 
-     * @param {function} callback 
+     * @param {String} formId specify a form to modify
+     * @param {Number} lineNum specify a line index
+     * @param {Number} elementNum specify an element index
+     * @param {String} event 
+     * @param {Function} callback 
      */
     onEvent: function(formId, lineNum, elementNum, event, callback){
         const form = this.formGroups[formId];
@@ -390,9 +470,9 @@ FormBuilder.prototype = {
      * 
      * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
      * 
-     * @param {string} formId 
-     * @param {Number} lineNum
-     * @param {Object} elementStyle 
+     * @param {String} formId specify a form to modify
+     * @param {Number} lineNum specify a line index
+     * @param {Object} elementStyle specify an element index
      */
      appendElementAtLine: function(formId, lineNum, elementStyle){
         const form = this.formGroups[formId];
@@ -409,9 +489,9 @@ FormBuilder.prototype = {
      * 
      * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
      * 
-     * @param {string} formId 
-     * @param {Number} lineNum
-     * @param {Number} elementNum
+     * @param {string} formId specify a form to modify
+     * @param {Number} lineNum specify a line index
+     * @param {Number} elementNum specify an element index
      * @param {Object} elementStyle 
      */
     insertElementAtLine: function(formId, lineNum, elementNum, elementStyle){
@@ -429,9 +509,9 @@ FormBuilder.prototype = {
      * 
      * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
      * 
-     * @param {string} formId 
-     * @param {Number} lineNum
-     * @param {Number} elementNum
+     * @param {String} formId specify a form to modify
+     * @param {Number} lineNum specify a line index
+     * @param {Number} elementNum specify an element index
      */
     deleteElementAtLine: function(formId, lineNum, elementNum){
         const form = this.formGroups[formId];
@@ -441,9 +521,45 @@ FormBuilder.prototype = {
         form.deleteElementAtLine(lineNum, elementNum);
         this.rerender(formId);
         return this;
+    },
+
+    /**
+     * modify properties of <formId> at <lineNum> <elementNum> by <style>, 
+     * 
+     * do nothing if formId doesn't exist
+     * 
+     * @param {String} formId specify a form to modify
+     * @param {Object} style specify properties and value to change. e.g. {"name": "newName", "type": "email"}
+     * @param {Number} lineNum specify a line index
+     * @param {Array[Number]} elementNum optional, an array of indices of elments that want to modify, apply to all elements at this line if not provided
+     */
+    setElementPropertiesAtLine: function(formId, style, lineNum, elementNum = undefined){
+        const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
+        form.setElementPropertiesAtLine(style, lineNum, elementNum);
+        this.rerender(formId);
+        return this;
+    },
+
+    /**
+     * move <formId> under <parentSelector>
+     * 
+     * do nothing if formId doesn't exist
+     * 
+     * @param {String} formId specify a form to move
+     * @param {String} parentSelector the new parent for <formId>, a css selector used for jQuery selector
+     */
+    changeParent: function(formId, parentSelector){
+        const form = this.formGroups[formId];
+        if (!form){
+            return this;
+        }
+        form.changeParent(parentSelector);
+        this.rerender(formId);
+        return this;
     }
-
-
 
     // TODO
 }
@@ -457,7 +573,7 @@ FormGroup.prototype = {
     renderForm: function (style, forms, formId) {
         // create the outer most form and wrap it by div
         const loginForm = `<form id=${formId}Form></form>`;
-        $("body").append(loginForm);
+        $(style.parentSelector).append(loginForm);
         let mainComponent = $(`#${formId}Form`);
         mainComponent.wrap(`<div id=${formId}Div></div>`);
         if (style.fieldset){
@@ -498,7 +614,7 @@ FormGroup.prototype = {
     
             $(`#${formId}Form`).css({
                 "margin": "auto",
-                "max-width": "50%",
+                "max-width": "100%",
                 "border-radius": "5px",
                 "background-color": "#f2f2f2",
                 "padding": "20px",
@@ -570,8 +686,25 @@ FormGroup.prototype = {
     deleteElementAtLine: function(lineNum, elementNum){
         const lineArray = this.style[`line${lineNum}`];
         lineArray.splice(elementNum, 1);
-    }
+    },
 
+    setElementPropertiesAtLine: function(style, lineNum, elementNum){
+        if (!elementNum){
+            elementNum = []
+            for (var i = 0; i < this.style[`line${lineNum}`]; i++){
+                elementNum.push(i);
+            }
+        }
+         for (const prop in style){
+            for (const element in elementNum){
+                this.style[`line${lineNum}`][element][prop] = style[prop];
+            }
+         }
+    },
+
+    changeParent: function(parentSelector){
+        this.style.parentSelector = parentSelector;
+    },
 
 
     // TODO
@@ -725,3 +858,17 @@ function passwordCheck(formInputId, reg) {
     }
 }
 
+
+function openForm(evt, formId) {
+    let i, tabContent, tablinks;
+    tabContent = document.getElementsByClassName("tabContent");
+    for (i = 0; i < tabContent.length; i++) {
+      tabContent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(`${formId}Div`).style.display = "block";
+    evt.currentTarget.className += " active";
+}

@@ -1,4 +1,10 @@
-$(document).ready(()=>{
+const formBuilder = new FormBuilder();
+let formId1 = formBuilder.addGroup("signup");
+let formId2 = formBuilder.addGroup("login");
+formBuilder.createTabForm({"signup": formId1, "login": formId2}, "body");
+
+
+/* $(document).ready(()=>{
 const body = $("body");
 $(".vl").css({
     "position": "fixed",
@@ -34,7 +40,7 @@ function formatLastCode(){
 // #1.1 make a signup form
 let descriotion = "<p>Make a default signup form:<br>Password fields have default input checking</p>"
 const formBuilder = new FormBuilder();
-let formId = formBuilder.addGroup("signup", {});
+let formId = formBuilder.addGroup("signup");
 formBuilder.selectForm(formId).css({"position": "relative", "left": "250px"});
 $(`#${formId}Div`).append(`<code>${descriotion}1: const formBuilder = new FormBuilder();<br>2: const formId = formBuilder.addGroup(\"signup\", {});</code>`).css( {"position": "relative"});
 formatLastCode();
@@ -43,7 +49,7 @@ body.append("<hr>")
 
 // #1.2 make login form
 descriotion = "<p>Make a default login form:</p>"
-formId = formBuilder.addGroup("login", {});
+formId = formBuilder.addGroup("login");
 formBuilder.selectForm(formId).css({"position": "relative", "left": "250px"});
 $(`#${formId}Div`).append(`<code>${descriotion}1: formId = formBuilder.addGroup(\"login\", {});</code>`).css( {"position": "relative"});
 formatLastCode();
@@ -159,4 +165,4 @@ $("#deleteall").click(function(){
     $(this).html("all forms removed");
 })
 body.append("<hr>")
-})
+}) */
