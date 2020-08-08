@@ -2,7 +2,7 @@ const formBuilder = new FormBuilder();
 let formId1 = formBuilder.addGroup("signup");
 let formId2 = formBuilder.addGroup("login");
 let formId3 = formBuilder.addGroup("signup");
-formBuilder.createTabForm({"signup": formId1, "login": formId2, "signup1": formId3}, "body", {"draggable": true});
+formBuilder.createTabForm({"signup": formId1, "login": formId2, "signup1": formId3}, "body", {draggable: true, closable: true});
 
 // let formId4 = formBuilder.addGroup("login");
 // let formId5 = formBuilder.addGroup("signup");

@@ -305,6 +305,11 @@ function dragElement(elmnt) {
 }
 
 
+function closeTab(event){
+    event.currentTarget.parentElement.style.display = 'none';
+}
+
+
 // API starts
 // controller of MVC pattern
 
@@ -355,7 +360,7 @@ FormBuilder.prototype = {
      */
     createTabForm: function (tabFormIds, parentSelector, options = {}) {
         // create tabs
-        let tab = `<div class='tabWrapper${this.tabNum}'><div class='tab${this.tabNum}'>`;
+        let tab = `<div class='tabWrapper${this.tabNum}'> ${options.closable && '<span class="close" onclick="closeTab(event)">&times;</span>'} <div class='tab${this.tabNum}'>`;
         for (const tabName in tabFormIds) {
             const formId = tabFormIds[tabName];
             const form = this.formGroups[formId];
@@ -382,7 +387,6 @@ FormBuilder.prototype = {
         const tabWrapper = $(`div.tabWrapper${this.tabNum}`);
         const tabAdded = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum}`);
         const tabButtons = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum} button`);
-        const tabButtonsActive = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum} button.active`);
         const tabContents = $(`div.tabWrapper${this.tabNum} div.tabContent${this.tabNum}`);
 
         tabWrapper.css({ "width": "50%", "position": "absolute" });
@@ -412,6 +416,15 @@ FormBuilder.prototype = {
             "border": "1px solid #ccc",
             "border-top": "none",
         });
+        if (options.closable) $(".close").css({
+            "cursor": "pointer",
+            "position": "absolute",
+            "top": "25px",
+            "right": "0%",
+            "font-size": "20px",
+            "padding": "12px 16px",
+            "transform": "translate(0%, -50%)",
+          });
         if (options.draggable) dragElement(document.getElementsByClassName(`tabWrapper${this.tabNum}`)[0]);
         this.tabNum++;
         return this;
