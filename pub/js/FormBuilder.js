@@ -166,6 +166,19 @@ function FormBuilder() {
     this.formGroups = {};  // formId-formGroup pairs of FormGroups, defined below
     this.lastAdded = "";  // the formId of the newly created formGroup
     this.tabNum = 0;  // number of concatenated forms
+    $("body").append("<div id='darkOverlay'></div>")
+    $("#darkOverlay").css({
+        "background": "none repeat scroll 0 0 rgba(0, 0, 0, 0.6)",
+        "cursor": "auto",
+        "display": "block",
+        "height": "100%",
+        "left": "0",
+        "overflow-y": "auto",
+        "position": "fixed",
+        "top": "0",
+        "width": "100%",
+        "z-index": "100", /*over everything */
+    }).hide();  // hide it by default
 }
 
 function FormGroup(type, style, formId) {
@@ -307,6 +320,7 @@ function dragElement(elmnt) {
 
 function closeTab(event){
     event.currentTarget.parentElement.style.display = 'none';
+    $("#darkOverlay").hide();
 }
 
 
@@ -356,12 +370,14 @@ FormBuilder.prototype = {
     /**
      * Combine forms together, by putting them into a tab.
      * 
+     * Note that you can't set both drag and float to true, jquery will only consider "float" when bothen of them are set to true.
+     * 
      * @param {Object} tabFormIds an object specify tab names and corresponding forms to combine. e.g. {"log in": "login0", "contact us": "contactus1"}
      */
     createTabForm: function (tabFormIds, parentSelector, options = {}) {
-        if (!options.closable) options.closable = ""; // prevent undefined span shows up
+        if (!options.close) options.close = ""; // prevent undefined span shows up
         // create tabs
-        let tab = `<div class='tabWrapper${this.tabNum}'> ${options.closable && '<span class="close" onclick="closeTab(event)">&times;</span>'} <div class='tab${this.tabNum}'>`;
+        let tab = `<div class='tabWrapper${this.tabNum}'> ${options.close && '<span class="close" onclick="closeTab(event)">&times;</span>'} <div class='tab${this.tabNum}'>`;
         for (const tabName in tabFormIds) {
             const formId = tabFormIds[tabName];
             const form = this.formGroups[formId];
@@ -375,6 +391,7 @@ FormBuilder.prototype = {
         parent.append(tab);
 
         // move forms under the tab just created
+        let formNum = 0;
         for (const tabName in tabFormIds) {
             const formId = tabFormIds[tabName];
             if (!this.formGroups[formId]) {
@@ -382,6 +399,10 @@ FormBuilder.prototype = {
             }
             this.changeParent(formId, `div.tabWrapper${this.tabNum}`).rerender(formId);
             $(`#${formId}Div`).addClass(`tabContent${this.tabNum}`);
+            if (formNum == 0){
+                $(`#${formId}Div`).addClass(`active`);
+                formNum ++;
+            }
         }
 
         // set tab css
@@ -389,8 +410,14 @@ FormBuilder.prototype = {
         const tabAdded = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum}`);
         const tabButtons = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum} button`);
         const tabContents = $(`div.tabWrapper${this.tabNum} div.tabContent${this.tabNum}`);
+        const activeContents = $(`div.tabWrapper${this.tabNum} div.active`);
 
-        tabWrapper.css({ "width": "50%", "position": "absolute" });
+        if (options.float){
+            if (options.float) $("#darkOverlay").show();
+            tabWrapper.css({ "width": "50%", "position": "absolute", "z-index": "101", "margin": "0 300px"});
+        } else{
+            tabWrapper.css({ "width": "50%", "position": "absolute", "z-index": "101"});
+        }
         tabAdded.css({
             "overflow": "hidden",
             "border": "1px solid #ccc",
@@ -417,7 +444,9 @@ FormBuilder.prototype = {
             "border": "1px solid #ccc",
             "border-top": "none",
         });
-        if (options.closable) $(".close").css({
+        activeContents.css({"display": "block"});
+
+        if (options.close) $(".close").css({
             "cursor": "pointer",
             "position": "absolute",
             "top": "25px",
@@ -426,7 +455,8 @@ FormBuilder.prototype = {
             "padding": "12px 16px",
             "transform": "translate(0%, -50%)",
           });
-        if (options.draggable) dragElement(document.getElementsByClassName(`tabWrapper${this.tabNum}`)[0]);
+
+        if (options.drag && !options.float) dragElement(document.getElementsByClassName(`tabWrapper${this.tabNum}`)[0]);
         this.tabNum++;
         return this;
     },
@@ -746,7 +776,7 @@ FormGroup.prototype = {
             $(`#${formId}Form`).css({
                 "margin": "auto",
                 "max-width": "100%",
-                "border-radius": "5px",
+                // "border-radius": "5px",
                 "background-color": "#f2f2f2",
                 "padding": "20px",
             });
