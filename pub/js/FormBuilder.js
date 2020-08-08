@@ -359,6 +359,7 @@ FormBuilder.prototype = {
      * @param {Object} tabFormIds an object specify tab names and corresponding forms to combine. e.g. {"log in": "login0", "contact us": "contactus1"}
      */
     createTabForm: function (tabFormIds, parentSelector, options = {}) {
+        if (!options.closable) options.closable = ""; // prevent undefined span shows up
         // create tabs
         let tab = `<div class='tabWrapper${this.tabNum}'> ${options.closable && '<span class="close" onclick="closeTab(event)">&times;</span>'} <div class='tab${this.tabNum}'>`;
         for (const tabName in tabFormIds) {
