@@ -83,10 +83,9 @@ const signupStyle = {
     fieldset: "Signup Form", // A frame which wraps all elements in this form, set to false if not needed
     numLines: 5,  // number of rows in this form
     customCss: false,  // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
-    // customCss: {
-    //     "width": "300px",
-    //     "height": "600px",
-    // },
+    customCss: {
+        "width": "50%",
+    },
 
     line0: [{
         tag: "input",
@@ -108,6 +107,9 @@ const signupStyle = {
         check: passwordCheck,  // input sanity check, can be disabled by setting useCheck to false, optional field
         on: false,  // a list of events that listens to, parallel list with "callbacks", optional field TODO
         callbacks: [],  // a list of functions that execute when events are triggered, parallel list with "on", optional field
+        customElementCss: {  // customized css style for this particular element, do not set width in this object!
+            "background-color": "#5FE3D5",
+        }
     }],
     line2: [{
         tag: "input",
@@ -195,13 +197,16 @@ function FormGroup(type, style, formId) {
  * @param {*} src 
  */
 function mergeStyle(dst, src) {
-    if ("useCss" in src) dst.useCss = src.useCss;
-    if ("useLabel" in src) dst.useLabel = src.useLabel;
-    if ("fieldset" in src) dst.fieldset = src.fieldset;
-    if ("customCss" in src) dst.customCss = src.customCss;
-    if ("useCheck" in src) dst.useCheck = src.useCheck;
-    return dst;
-    // TODO complete this function
+
+    for (const key in src){
+        if (key.startsWith("line")){
+            for (let i = 0; i <= src[key].length; i++){
+                mergeStyle(dst[key][i], src[key][i])
+            }
+        } else{
+            dst[key] = src[key]
+        }
+    }
 }
 
 
@@ -397,7 +402,7 @@ FormBuilder.prototype = {
             if (!this.formGroups[formId]) {
                 continue;
             }
-            this.changeParent(formId, `div.tabWrapper${this.tabNum}`).rerender(formId);
+            this.changeParent(formId, `div.tabWrapper${this.tabNum}`);
             $(`#${formId}Div`).addClass(`tabContent${this.tabNum}`);
             if (formNum == 0){
                 $(`#${formId}Div`).addClass(`active`);
@@ -958,9 +963,9 @@ function getInputString(lineName, line, formId, style) {
     }
     let tag;
     if (line.type === "submit") {
-        tag = `<${line.tag} class='${formId}Submit' id='${formId + lineName + line.name.split(" ").join("")}' type='submit' ${attributes} ${line.value && "value='" + line.value + "'"}>`
+        tag = `<${line.tag} class='${formId}Submit' id='${formId + lineName + line.name.split(" ").join("")}' type='submit' ${line.customElementCss? getCustomElementCssString(line.customElementCss) : ""} ${attributes} ${line.value && "value='" + line.value + "'"}>`
     } else {
-        tag = `<${line.tag} class='${formId}Input ${formId + lineName}' ${line.type && ("type='" + line.type + "'")} ${line.placeholder && ("placeholder='" + line.placeholder + "'")} id='${formId + lineName + line.name.split(" ").join("")}' ${line.name && "name='" + line.name.split(" ").join("") + "'"} ${attributes} ${line.value && "value='" + line.value + "'"}></${line.tag}>`
+        tag = `<${line.tag} class='${formId}Input ${formId + lineName}' ${line.type && ("type='" + line.type + "'")} ${line.placeholder && ("placeholder='" + line.placeholder + "'")} id='${formId + lineName + line.name.split(" ").join("")}' ${line.name && "name='" + line.name.split(" ").join("") + "'"} ${line.customElementCss? getCustomElementCssString(line.customElementCss) : ""} ${attributes} ${line.value && "value='" + line.value + "'"}></${line.tag}>`
     }
     if (line.type === "checkbox" || line.type === "radio") {
         tag += `<label for=${formId + lineName + line.name.split(" ").join("")}>${line.name}</label>`
@@ -968,5 +973,15 @@ function getInputString(lineName, line, formId, style) {
     if (line.tooltip) {
         tag = `<div class=${"tooltip" + formId + lineName}>` + tag + `<span class="tooltiptext${formId + lineName}">${line.tooltip}</span></div>`
     }
+    log(tag);
     return tag;
+}
+
+function getCustomElementCssString(obj){
+    let ans = 'style="';
+    for (const key in obj){
+        ans += `${key}: ${obj[key]}; `
+    }
+    ans += '"';
+    return ans;
 }
