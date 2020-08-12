@@ -14,78 +14,10 @@ const log = console.log;
 const loginStyle = {
     useCss: true,
     useLabel: true,
-    numLines: 5,
+    numLines: 4,
     fieldset: "login",
     parentSelector: "body",
 
-
-    line0: [{
-        tag: "input",
-        name: "Username",
-        type: "text",
-        value: "",
-        placeholder: "please enter your username...",
-    }],
-
-    line1: [{
-        tag: "input",
-        name: "Password",
-        type: "password",
-        value: "",
-        placeholder: "please enter your password...",
-    }, {
-        tag: "input",
-        name: "Email",
-        type: "email",
-        value: "",
-        placeholder: "123456@example.com",
-    }, {
-        tag: "input",
-        name: "Verification code",
-        type: "text",
-        value: "",
-        placeholder: "please enter your verification code...",
-    }],
-    line2: [{
-        tag: "textarea",
-        name: "Descirption",
-        type: "",
-        value: "",
-        placeholder: "",
-        attributes: {
-            rows: "4",
-            cols: "50",
-        },
-    }],
-    line3: [{
-        tag: "input",
-        name: "",
-        type: "submit",
-        placeholder: "",
-        value: "Login",
-    }],
-    line4: [{
-        tag: "input",
-        name: "Remember me",
-        type: "checkbox",
-        value: "",
-        width: "2%",
-    }]
-
-}
-
-const signupStyle = {
-    useCss: true,  // whether to apply the default css style for every element in this formGroup
-    useLabel: true,  // whether to enable labels for each element
-    useCheck: true,  // whether to use default input sanity check for all elements
-
-    parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
-    fieldset: "Signup Form", // A frame which wraps all elements in this form, set to false if not needed
-    numLines: 5,  // number of rows in this form
-    customCss: false,  // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
-    customCss: {
-        "width": "50%",
-    },
 
     line0: [{
         tag: "input",
@@ -95,6 +27,7 @@ const signupStyle = {
         value: "",
         tooltip: "a name",
     }],
+
     line1: [{
         tag: "input",  // html tag, necessary field
         name: "Password", // name for the label, necessary field even if label is disabled
@@ -107,8 +40,71 @@ const signupStyle = {
         check: passwordCheck,  // input sanity check, can be disabled by setting useCheck to false, optional field
         on: false,  // a list of events that listens to, parallel list with "callbacks", optional field TODO
         callbacks: [],  // a list of functions that execute when events are triggered, parallel list with "on", optional field
-        customElementCss: {  // customized css style for this particular element, do not set width in this object!
-            "background-color": "#5FE3D5",
+
+    }],
+
+    // line2: [{
+    //     tag: "textarea",
+    //     name: "Descirption",
+    //     type: "",
+    //     value: "",
+    //     placeholder: "",
+    //     attributes: {
+    //         rows: "4",
+    //         cols: "50",
+    //     },
+    // }],
+    line2: [{
+        tag: "input",
+        name: "",
+        type: "submit",
+        placeholder: "",
+        value: "Login",
+    }],
+    line3: [{
+        tag: "input",
+        name: "remember",
+        type: "checkbox",
+        value: "Remember me",
+        customElementCss: {
+            "border": "none",
+        }
+    }]
+
+}
+
+const signupStyle = {
+    useCss: true,  // whether to apply the default css style for every element in this formGroup
+    useLabel: true,  // whether to enable labels for each element
+    useCheck: true,  // whether to use default input sanity check for all elements
+
+    parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
+    fieldset: "Signup Form", // A frame which wraps all elements in this form, set to false if not needed
+    numLines: 5,  // number of rows in this form
+    customCss: { // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
+        "width": "50%",
+    },  
+
+    line0: [{
+        tag: "input",
+        name: "Username",
+        type: "text",
+        placeholder: "please enter your username...",
+        tooltip: "a name",
+    }],
+    line1: [{
+        tag: "input",  // html tag, necessary field
+        name: "Password", // name for the label, necessary field and please be unique
+        type: "password",  // tag type, necessary field
+        placeholder: "please enter your pswd...",  // optional field
+        value: "",  // default value, optional field
+
+        tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",  // optional field
+        regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),  // optional field
+        check: passwordCheck,  // input sanity check, can be disabled by setting useCheck to false, optional field
+        on: false,  // a list of events that listens to, parallel list with "callbacks", optional field TODO
+        callbacks: [],  // a list of functions that execute when events are triggered, parallel list with "on", optional field
+        customElementCss: {  // customized css style for this particular element, do not set width in this object! this css takes precedence to the default css, optional field.
         }
     }],
     line2: [{
@@ -127,6 +123,15 @@ const signupStyle = {
         placeholder: "",
         value: "",
     }],
+    // line4: [{
+    //     tag: "p",
+    //     name: "",
+    //     type: "",
+    //     placeholder: "",
+    //     value: "",
+    //     // contents between element tags, <p>elementContent</p>
+    //     elementContent: "hello this is demo text of js form builder, dummy text dummy text dummy text dummy text dummy text dummy text dummy text dummy text dummy text dummy text dummy text dummy text dummy text dummy text",
+    // }],
     line4: [{
         tag: "input",
         name: "",
@@ -137,7 +142,73 @@ const signupStyle = {
 }
 
 const mediaPostStyle = {
+    useCss: true,  // whether to apply the default css style for every element in this formGroup
+    useLabel: true,  // whether to enable labels for each element
+    useCheck: false,  // whether to use default input sanity check for all elements
 
+    parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
+    fieldset: false, // A frame which wraps all elements in this form, set to false if not needed
+    numLines: 5,  // number of rows in this form
+    customCss: { // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
+        "width": "50%",
+    },  
+
+    line0: [{
+        tag: "input",
+        name: "Summary",
+        type: "text",
+        placeholder: "Enter a one line summary...",
+        value: "",
+    }],
+    line1: [{
+        tag: "input",
+        value: "Rich text editor",
+        type: "radio",
+        name: "editor",  // special note: <name> in radio/checkbox will not be used for the label next to the radio/checkbox, however, value will be
+        attributes: { "selected": "true" },
+        customElementCss: {
+            "border": "none",
+            "padding": "0px"
+        }
+    }, {
+        tag: "input",
+        value: "Plain text editor",
+        type: "radio",
+        name: "editor",
+        customElementCss: {
+            "border": "none",
+            "padding": "0px"
+        }
+    },{
+        tag: "input",
+        value: "Markdown editor",
+        type: "radio",
+        name: "editor",
+        customElementCss: {
+            "border": "none",
+            "padding": "0px"
+        }
+    }],
+    line2: [{
+            tag: "textarea",
+            name: "Descirption",
+            attributes: {
+                rows: "20",
+                cols: "50",
+            },
+    }],
+    line3: [{
+        tag: "select",
+        name: "Show my name as",
+        options: ["Doctor Strange", "Anonymous to Classmates", "Anonymous to All"]
+    }],
+    line4: [{
+        tag: "input",
+        name: "",
+        type: "submit",
+        placeholder: "",
+        value: "Post My Question!",
+    }]
 }
 
 const replyPostStyle = {
@@ -350,24 +421,24 @@ FormBuilder.prototype = {
         let temp = {};
         if (!builtinStyle) { // init a completely customized form
             temp = initEmptyStyle(); // todo
-            style = mergeStyle(temp, style)
+            mergeStyle(temp, style)
         } else {
             if (jQuery.isEmptyObject(style)) {
                 // deepcopy predefined styles for this type
-                jQuery.extend(true, style, builtinStyle)
+                jQuery.extend(true, temp, builtinStyle)
 
             } else {
                 jQuery.extend(true, temp, builtinStyle)
-                style = mergeStyle(temp, style);  // TODO
+                mergeStyle(temp, style);  // TODO
             }
         }
 
 
-        if (!styleSanityCheck(style)) { // check if there is any invalid fields that will damage the program
+        if (!styleSanityCheck(temp)) { // check if there is any invalid fields that will damage the program
             throw new TypeError("Style format incorrect");
         }
 
-        this.formGroups[formId] = new FormGroup(type, style, formId);  // render
+        this.formGroups[formId] = new FormGroup(type, temp, formId);  // render
         this.lastAdded = formId;
         return formId;
     },
@@ -792,6 +863,15 @@ FormGroup.prototype = {
             $(`#${formId}Form`).css(style.customCss);
         }
 
+        for (let i = 0; i < style.numLines; i++) {
+            const lineName = `line${i}`;
+            style[lineName].map((element, index) => {
+                if (element.customElementCss){
+                    $(`#${formId + lineName + element.name.split(" ").join("") + index.toString()}`).css(element.customElementCss)
+                }
+            });
+        }
+
     },
 
     rerender: function () {
@@ -862,7 +942,7 @@ FormGroup.prototype = {
             }
         }
         for (const prop in style) {
-            for (const element in elementNum) {
+            for (const element of elementNum) {
                 this.style[`line${lineNum}`][element][prop] = style[prop];
             }
         }
@@ -885,9 +965,9 @@ function renderLine(lineName, line, formId, mainComponent, style) {
 
     // create labels
     if (style.useLabel) {
-        line.map(element => {
+        line.map((element, index) => {
             if (style.useLabel && element.type !== "radio" && element.type !== "checkbox") {
-                const label = `<label class=${formId + lineName}Label for=${formId + lineName + element.name.split(" ").join("")}>${element.name && element.name + ":"}</label>`;
+                const label = `<label class=${formId + lineName}Label for=${formId + lineName + element.name.split(" ").join("") + index.toString()}>${element.name && element.name + ":"}</label>`;
                 mainComponent.append(label);
             }
         });
@@ -899,12 +979,12 @@ function renderLine(lineName, line, formId, mainComponent, style) {
     }
 
     // create elements
-    line.map(element => {
+    line.map((element, index) => {
         let tag;
         if (element.tag === "select") {
-            tag = getSelectString(lineName, element, formId, style);
+            tag = getSelectString(lineName, element, formId, index);
         } else {
-            tag = getInputString(lineName, element, formId, style);
+            tag = getInputString(lineName, element, formId, index);
         }
 
         mainComponent.append(tag);
@@ -912,14 +992,14 @@ function renderLine(lineName, line, formId, mainComponent, style) {
         // adding event listeners
         if (element.on) {
             element.on.map((event, ind) => {
-                $(`#${formId + lineName + element.name.split(" ").join("")}`).on(event, element.callbacks[ind]);
+                $(`#${formId + lineName + element.name.split(" ").join("") + index.toString()}`).on(event, element.callbacks[ind]);
             })
         }
 
         // input check
         if (style.useCheck && element.check) {
-            $(`#${formId + lineName + element.name.split(" ").join("")}`).change(function () {
-                element.check(formId + lineName + element.name.split(" ").join(""), element.regex)
+            $(`#${formId + lineName + element.name.split(" ").join("") + index.toString()}`).change(function () {
+                element.check(formId + lineName + element.name.split(" ").join("") + index.toString(), element.regex)
             })
         }
 
@@ -939,16 +1019,20 @@ function renderLine(lineName, line, formId, mainComponent, style) {
         lineInput.css({ "width": `${width}%`, "display": "inline-block" });
     }
 
-    line.map(element => {
+    line.map((element, index) => {
         if (element.width) {
-            $(`#${formId + lineName + element.name.split(" ").join("")}`).css({ "width": element.width })
+            $(`#${formId + lineName + element.name.split(" ").join("") + index.toString()}`).css({ "width": element.width })
         }
     });
 }
 
 
-function getSelectString(lineName, line, formId, style) {
-    let tag = `<select ${line.name && "name='" + line.name.split(" ").join("") + "'"} id='${formId + lineName + line.name.split(" ").join("")}' class='${formId}Input ${formId + lineName}'>`
+function getSelectString(lineName, line, formId, elementIndex) {
+    let attributes = "";
+    for (const attr in line.attributes) {
+        attributes += attr + "='" + line.attributes[attr] + "' ";
+    }
+    let tag = `<select ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}' class='${formId}Input ${formId + lineName}' ${attributes}>`
     tag += line.options.slice(1).reduce((accum, val) =>
         accum + `<option value="${val}">${val}</option>`, `<option value="${line.options[0]}">${line.options[0]}</option>`
     );
@@ -956,24 +1040,27 @@ function getSelectString(lineName, line, formId, style) {
     return tag;
 }
 
-function getInputString(lineName, line, formId, style) {
+function getInputString(lineName, line, formId, elementIndex) {
     let attributes = "";
     for (const attr in line.attributes) {
         attributes += attr + "='" + line.attributes[attr] + "' ";
     }
     let tag;
     if (line.type === "submit") {
-        tag = `<${line.tag} class='${formId}Submit' id='${formId + lineName + line.name.split(" ").join("")}' type='submit' ${line.customElementCss? getCustomElementCssString(line.customElementCss) : ""} ${attributes} ${line.value && "value='" + line.value + "'"}>`
+        tag = `<${line.tag} class='${formId}Submit' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}' type='submit' ${attributes} ${line.value? "value='" + line.value + "'" : ""}>`
+
+    } else if (line.type === "checkbox" || line.type === "radio") {
+        tag = `<div class='${formId}Input ${formId + lineName}' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}'> <${line.tag} ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
     } else {
-        tag = `<${line.tag} class='${formId}Input ${formId + lineName}' ${line.type && ("type='" + line.type + "'")} ${line.placeholder && ("placeholder='" + line.placeholder + "'")} id='${formId + lineName + line.name.split(" ").join("")}' ${line.name && "name='" + line.name.split(" ").join("") + "'"} ${line.customElementCss? getCustomElementCssString(line.customElementCss) : ""} ${attributes} ${line.value && "value='" + line.value + "'"}></${line.tag}>`
+        tag = `<${line.tag} class='${formId}Input ${formId + lineName}' ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}' ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
     }
     if (line.type === "checkbox" || line.type === "radio") {
-        tag += `<label for=${formId + lineName + line.name.split(" ").join("")}>${line.name}</label>`
+        tag += `<label for=${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}>${line.value}</label></div>`
     }
     if (line.tooltip) {
         tag = `<div class=${"tooltip" + formId + lineName}>` + tag + `<span class="tooltiptext${formId + lineName}">${line.tooltip}</span></div>`
     }
-    log(tag);
+    // log(tag);
     return tag;
 }
 

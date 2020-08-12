@@ -1,12 +1,12 @@
 const formBuilder = new FormBuilder();
-let formId1 = formBuilder.addGroup("signup");
+let formId1 = formBuilder.addGroup("mediaPost");
 let formId2 = formBuilder.addGroup("login");
 let formId3 = formBuilder.addGroup("signup");
-formBuilder.createTabForm({"signup": formId1, "login": formId2, "signup1": formId3}, "body", {drag: true, close: true, float: false});
+formBuilder.createTabForm({"media": formId1, "login": formId2, "signup1": formId3}, "body", {drag: true, close: true, float: false});
 
-// let formId4 = formBuilder.addGroup("login");
-// let formId5 = formBuilder.addGroup("signup");
-// formBuilder.createTabForm({"login": formId4, "signup1": formId5}, "body", {"drag": true});
+let formId4 = formBuilder.addGroup("login");
+let formId5 = formBuilder.addGroup("signup");
+formBuilder.createTabForm({"login": formId4, "signup1": formId5}, "body", {"drag": true});
 
 /* $(document).ready(()=>{
 const body = $("body");
