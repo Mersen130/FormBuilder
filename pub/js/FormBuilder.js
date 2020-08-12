@@ -454,20 +454,23 @@ FormBuilder.prototype = {
         if (!options.close) options.close = ""; // prevent undefined span shows up
         // create tabs
         let tab = `<div class='tabWrapper${this.tabNum}'> ${options.close && '<span class="close" onclick="closeTab(event)">&times;</span>'} <div class='tab${this.tabNum}'>`;
+        let formNum = 0;
         for (const tabName in tabFormIds) {
             const formId = tabFormIds[tabName];
             const form = this.formGroups[formId];
             if (!form) {
                 continue;
             }
-            tab += `<button class='tablinks${this.tabNum}' onclick="openForm(event, '${formId}', ${this.tabNum})">${tabName}</button>`
+            tab += `<button class='tablinks${this.tabNum} ${formNum === 0 ? "active" : ""}' onclick="openForm(event, '${formId}', ${this.tabNum})">${tabName}</button>`
+            formNum ++;
         }
         tab += "</div></div>";
         const parent = $(parentSelector);
         parent.append(tab);
 
         // move forms under the tab just created
-        let formNum = 0;
+        let firstForm;
+        formNum = 0;
         for (const tabName in tabFormIds) {
             const formId = tabFormIds[tabName];
             if (!this.formGroups[formId]) {
@@ -476,8 +479,8 @@ FormBuilder.prototype = {
             this.changeParent(formId, `div.tabWrapper${this.tabNum}`);
             $(`#${formId}Div`).addClass(`tabContent${this.tabNum}`);
             if (formNum == 0){
-                $(`#${formId}Div`).addClass(`active`);
-                formNum ++;
+                firstForm = `#${formId}Div`;
+                formNum++;
             }
         }
 
@@ -486,7 +489,7 @@ FormBuilder.prototype = {
         const tabAdded = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum}`);
         const tabButtons = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum} button`);
         const tabContents = $(`div.tabWrapper${this.tabNum} div.tabContent${this.tabNum}`);
-        const activeContents = $(`div.tabWrapper${this.tabNum} div.active`);
+        const activeContents = $(`div.tabWrapper${this.tabNum} div.tab${this.tabNum} button.active`);
 
         if (options.float){
             if (options.float) $("#darkOverlay").show();
@@ -520,7 +523,8 @@ FormBuilder.prototype = {
             "border": "1px solid #ccc",
             "border-top": "none",
         });
-        activeContents.css({"display": "block"});
+        activeContents.css({"background-color": "#ccc"});
+        $(firstForm).css({"display": "block"});
 
         if (options.close) $(".close").css({
             "cursor": "pointer",
