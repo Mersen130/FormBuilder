@@ -3,6 +3,10 @@
  * 
  * prerequisite: jQuery-3.5.1
  * 
+ * reference:
+ * Some codes of this library uses w3schools as a reference.
+ * link: https://www.w3schools.com/howto/howto_js_draggable.asp
+ * 
  * @author Qixin Ye
  * @contact mqixin.ye@mail.utoronto.ca
  */
@@ -17,6 +21,8 @@ const loginStyle = {
     numLines: 4,
     fieldset: "login",
     parentSelector: "body",
+    class: "",  // customized add-on classname, one can use this to interact with third-party frameworks etc.
+    id: "", // customized add-on id
 
 
     line0: [{
@@ -34,6 +40,9 @@ const loginStyle = {
         type: "password",  // tag type, necessary field
         placeholder: "please enter your pswd...",  // necessary field
         value: "",  // default value, necessary field
+        
+        class: "",  // customized add-on classname, one can use this to interact with third-party frameworks etc.
+        id: "", // customized add-on id
 
         tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",  // optional field
         regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),  // optional field
@@ -800,7 +809,7 @@ FormBuilder.prototype = {
         form.changeParent(parentSelector);
         this.rerender(formId);
         return this;
-    }
+    },
 
     // TODO
 }
@@ -813,10 +822,10 @@ FormGroup.prototype = {
 
     renderForm: function (style, forms, formId) {
         // create the outer most form and wrap it by div
-        const loginForm = `<form id=${formId}Form></form>`;
+        const loginForm = `<form id="${formId}Form"></form>`;
         $(style.parentSelector).append(loginForm);
         let mainComponent = $(`#${formId}Form`);
-        mainComponent.wrap(`<div id=${formId}Div></div>`);
+        mainComponent.wrap(`<div id="${formId}Div ${style.id? style.id : ''}" class="${style.class? style.class : ''}"></div>`);
         if (style.fieldset) {
             mainComponent.append(`<fieldset id=${formId}fieldset></fieldset>`);
             mainComponent = $(`#${formId}fieldset`);
@@ -1036,7 +1045,7 @@ function getSelectString(lineName, line, formId, elementIndex) {
     for (const attr in line.attributes) {
         attributes += attr + "='" + line.attributes[attr] + "' ";
     }
-    let tag = `<select ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}' class='${formId}Input ${formId + lineName}' ${attributes}>`
+    let tag = `<select ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()} ${line.id? line.id : ""}' class='${formId}Input ${formId + lineName} ${line.class? line.class : ""}' ${attributes}>`
     tag += line.options.slice(1).reduce((accum, val) =>
         accum + `<option value="${val}">${val}</option>`, `<option value="${line.options[0]}">${line.options[0]}</option>`
     );
@@ -1051,12 +1060,12 @@ function getInputString(lineName, line, formId, elementIndex) {
     }
     let tag;
     if (line.type === "submit") {
-        tag = `<${line.tag} class='${formId}Submit' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}' type='submit' ${attributes} ${line.value? "value='" + line.value + "'" : ""}>`
+        tag = `<${line.tag} class='${formId}Submit ${line.class? line.class : ""}' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()} ${line.id? line.id : ""}' type='submit' ${attributes} ${line.value? "value='" + line.value + "'" : ""}>`
 
     } else if (line.type === "checkbox" || line.type === "radio") {
-        tag = `<div class='${formId}Input ${formId + lineName}' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}'> <${line.tag} ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
+        tag = `<div class='${formId}Input ${formId + lineName} ${line.class? line.class : ""}' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()} ${line.id? line.id : ""}'> <${line.tag} ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
     } else {
-        tag = `<${line.tag} class='${formId}Input ${formId + lineName}' ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}' ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
+        tag = `<${line.tag} class='${formId}Input ${formId + lineName} ${line.class? line.class : ""}' ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()} ${line.id? line.id : ""}' ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
     }
     if (line.type === "checkbox" || line.type === "radio") {
         tag += `<label for=${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}>${line.value}</label></div>`
