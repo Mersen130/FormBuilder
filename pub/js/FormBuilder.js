@@ -11,7 +11,7 @@
  * @contact mqixin.ye@mail.utoronto.ca
  */
 
-"use strict"
+"use strict";
 const log = console.log;
 
 // predefined styles
