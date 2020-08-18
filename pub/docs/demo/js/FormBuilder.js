@@ -7,6 +7,16 @@
  * Some codes of this library uses w3schools as a reference.
  * link: https://www.w3schools.com/howto/howto_js_draggable.asp
  * 
+ * MIT license:
+ * Copyright 2020 Qixin Ye
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * 
+ * 
  * @author Qixin Ye
  * @contact mqixin.ye@mail.utoronto.ca
  */
@@ -675,7 +685,7 @@
         },
 
         /**
-         * append a new line at the end of the formGroup specified by formId
+         * delete a line at the end of the formGroup specified by formId
          * 
          * do nothing if line/formId doesn't exist
          * 
@@ -728,11 +738,11 @@
         /**
          * append a new element at the end of the line of the formGroup specified by formId
          * 
-         * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
+         * do nothing if formId doesn't exist, error may occur if elementStyle is in wrong format.
          * 
          * @param {String} formId specify a form to modify
          * @param {Number} lineNum specify a line index
-         * @param {Object} elementStyle specify an element index
+         * @param {Object} elementStyle
          */
         appendElementAtLine: function (formId, lineNum, elementStyle) {
             const form = this.formGroups[formId];
@@ -747,7 +757,7 @@
         /**
          * insert a new element at the elementNum of the line of the formGroup specified by formId
          * 
-         * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
+         * do nothing if formId doesn't exist, error may occur if elementStyle is in wrong format.
          * 
          * @param {string} formId specify a form to modify
          * @param {Number} lineNum specify a line index
@@ -767,7 +777,7 @@
         /**
          * delete an element at the elementNum of the line of the formGroup specified by formId
          * 
-         * do nothing if formId doesn't exist, error may occur if lineStyle is in wrong format.
+         * do nothing if formId doesn't exist
          * 
          * @param {String} formId specify a form to modify
          * @param {Number} lineNum specify a line index
