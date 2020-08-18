@@ -16,7 +16,6 @@
 (function (global){
 
     const log = console.log;
-    log(1)
 
     const formBuilderHelper = {
 
@@ -1098,5 +1097,4 @@
     global.formBuilderHelper = global.formBuilderHelper || formBuilderHelper;
     global.FormBuilder = global.FormBuilder || FormBuilder;
     global.FormGroup = global.FormGroup || FormGroup;
-    log(global.FormBuilder.prototype)
 })(window);

@@ -11,5 +11,7 @@
 <br />
 
 
-[Examples]()
+<span onclick="gotoDemo()">[Examples]()</span>
 [API](#documentation-v100)
+
+<!-- ![](background.png) -->
