@@ -1,2 +1,2 @@
 # js-library-yeqixin
-# the library code is under ./pub/js
+# the library code is located at ./pub/docs/demo/js/FormBuilder.js
