@@ -16,15 +16,87 @@ const formBuilder = new FormBuilder();
 ----
 ----
 
-# How it works?
+# How it works? 
+
+- [skip](#api) this section if you don't care/only want to use built-in forms
+
+<img src="./_media/signupForm.png"
+    alt="signup form"
+    style='height: 450px; width: 720px;'/>
+<div align="center">the following explanations are based on the above form</div>
 
 ## Object explaination
 
+All information about a particular form is stored in a `style` object. Note: users do not need to write this form entirely from scratch, there’re some built-in `style` objects and some helpers made for creating this Object.
 
+All of the fields in the object below are corresponding to what is displayed in the picture above, the signup form in the above picture has 5 lines, each line contains one element. So in this style object, numLines is 5, line0...line4 hold each line’s information in an array. The length of this.line* is the same as the number of elements in line*. For example, the second line contains only password, then this.line1.length === 1. Detailed explanations are in the comments.
 
 ## Object example
+```javascript
+        signupStyle: {
+            useCss: true,  // whether to apply the default css style for every element in this formGroup
+            useLabel: true,  // whether to enable labels for each element
+            useCheck: true,  // whether to use default input sanity check for all elements
 
+            parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
+            fieldset: "Signup Form", // A frame which wraps all elements in this form, set to false if not needed
+            numLines: 5,  // number of rows in this form
+            customCss: { // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
+                "width": "50%",
+            },  
 
+            line0: [{
+                tag: "input",
+                name: "Username",
+                type: "text",
+                placeholder: "please enter your username...",
+                tooltip: "a name",
+            }],
+            line1: [{
+                tag: "input",  // html tag, necessary field
+                name: "Password", // name for the label, necessary field and please be unique
+                type: "password",  // tag type, necessary field
+
+                placeholder: "please enter your pswd...",  // optional field
+                value: "",  // default value, optional field
+                elementContent: "",  // optional, text displayed between tags, for example, <p>elementContent</p>
+
+                tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",  // optional field
+                regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),  // optional field
+                check: formBuilderHelper.passwordCheck,  // input sanity check, can be disabled by setting useCheck to false, optional field, optional field
+                on: false,  // a list of events that listens to, parallel list with "callbacks", optional field, e.g. ["click", "change"]
+                callbacks: [],  // a list of functions that execute when events are triggered, parallel list with "on", optional field, e.g. [f1, f2]
+                customElementCss: {  // customized css style for this particular element, do not set width in this object! this css takes precedence to the default css, optional field.
+                }
+            }],
+            line2: [{
+                tag: "input",
+                name: "Confirm\ Password",
+                type: "password",
+                placeholder: "please enter your pswd again...",
+                value: "something...",
+                regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),
+                check: formBuilderHelper.passwordCheck,
+            }],
+            line3: [{
+                tag: "input",
+                name: "Birthday",
+                type: "date",
+                placeholder: "",
+                value: "",
+            }],
+            line4: [{
+                tag: "input",
+                name: "",
+                type: "submit",
+                placeholder: "",
+                value: "Create Account",
+            }]
+        },
+```
+
+- `lineStyle` in the following API documentation is refering to the array in `signupStyle.line1`
+- `elementStyle` in the following API documentation is refering to the object in `signupStyle.line1[0]`
 
 
 ----
@@ -36,7 +108,7 @@ const formBuilder = new FormBuilder();
 ### FormBuilder.addGroup(type, style = {}):
 * `Description`: add a form to the window. If `type` provided is not recongnizable, `type` is treated as a custom type. Returns `formId` of this form (a string)
 * `type`: **String**, a one word desriprion of the new form. This library provides default layouts for `login`, `signup`, `mediaPost`, `replyPost`, `followUp`, `question`, `contactMe`. More types coming soon...
-* `style`: TODO
+* `style`: **Object** [see here](#object-example)
 * `return`: **String**, a unique formId for the newly created form, this formId can be used as an arguments for other methods of this library.
 * example:
 ```javascript
@@ -96,7 +168,7 @@ console.log(formId1 === formBuilder.getLastAdded());  // true
 
 
 ### FormBuilder.getInput(formId):
-* `Description`: get all user's input via an array, the order of values are the same as the order they appear in the [style](todo) object. If `formId` doesn't exist, return an empty array.
+* `Description`: get all user's input via an array, the order of values are the same as the order they appear in the [style](#object-example) object. If `formId` doesn't exist, return an empty array.
 * `formId`: **String**, a unique formId created by [FormBuilder.addGroup](#formbuilderaddGrouptype-style-), represents the target form
 * `return`: **Array**, array of values, storing user input of the target form.
 * example:
@@ -155,7 +227,7 @@ const formId2 = formBuilder.rerender(formId1);
 ### FormBuilder.appendLine(formId, lineStyle):
 * `Description`: append a new line at the end of the `formId`. Do nothing if `formId` doesn't exist, error may occur if `lineStyle` is in wrong format.
 * `formId`: **String**, a unique formId created by [FormBuilder.addGroup](#formbuilderaddGrouptype-style-), represents the target form
-* `lineStyle`: TODO
+* `lineStyle`: **Array** [see here](#object-example)
 * `return`: **FormBuilder**, the calling instance of the FormBuilder
 * example:
 
@@ -179,7 +251,7 @@ const formId2 = formBuilder.appendLine(formId1, newSubmitButton);
 * `Description`: insert a new line at `lineNum` of the `formId`. Do nothing if `formId` doesn't exist, error may occur if `lineStyle` is in wrong format.
 * `formId`: **String**, a unique formId created by [FormBuilder.addGroup](#formbuilderaddGrouptype-style-), represents the target form
 * `lineNum`: **Number**, new line will be inserted to this index.
-* `lineStyle`: **Array** TODO
+* `lineStyle`: **Array** [see here](#object-example)
 * `return`: **FormBuilder**, the calling instance of the FormBuilder
 * example:
 
@@ -203,7 +275,7 @@ formBuilder.insertLine(formId1, 1, newEmailInput);
 * `Description`: Append a new element at the end of the line of the `formId`. Do nothing if `formId` doesn't exist, error may occur if `elementStyle` is in wrong format. NOTE: you don't need to worry about the css width styling, FormBuilder.JS will do it for you!
 * `formId`: **String**, a unique formId created by [FormBuilder.addGroup](#formbuilderaddGrouptype-style-), represents the target form
 * `lineNum`: **Number**, specify a line index
-* `elementStyle`: **Object** TODO
+* `elementStyle`: **Object** [see here](#object-example)
 * `return`: **FormBuilder**, the calling instance of the FormBuilder
 * example:
 
@@ -228,7 +300,7 @@ formBuilder.appendElementAtLine(formId1, 1, newEmailInput);
 * `formId`: **String**, a unique formId created by [FormBuilder.addGroup](#formbuilderaddGrouptype-style-), represents the target form
 * `lineNum`: **Number** specify a line index
 * `elementNum`: **Number**, specify an element index
-* `elementStyle`: **Object** TODO
+* `elementStyle`: **Object** [see here](#object-example)
 * `return`: **FormBuilder**, the calling instance of the FormBuilder
 * example:
 
@@ -348,7 +420,7 @@ formBuilder.deleteLine(formId1, 1);
 * `formId`: **String**, a unique formId created by [FormBuilder.addGroup](#formbuilderaddGrouptype-style-), represents the target form
 * `lineNum`: **Number** specify a line index
 * `elementNum`: **Number**, specify an element index
-* `elementStyle`: **Object** TODO
+* `elementStyle`: **Object** [see here](#object-example)
 * `return`: **FormBuilder**, the calling instance of the FormBuilder
 * example:
 
