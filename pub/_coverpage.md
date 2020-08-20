@@ -11,11 +11,11 @@ Created by Qixin Ye, MIT license.
 - Multiple built-in form
 
 <br />
-<a id="downloadFormBuilder" href="./demo/js/FormBuilder.js" download></a>
 
 
-<span onclick="gotoDemo()">[Show Cases]()</span>
-<span onclick="downloadFormBuilder()">[Download]()</span>
+
+<a href="/demo/UseCases.html">Show Cases</a>
+<a id="downloadFormBuilder" href="./demo/js/FormBuilder.js" download>Download</a>
 [API & Examples](#documentation-v100)
 
 <!-- ![](background.png) -->
