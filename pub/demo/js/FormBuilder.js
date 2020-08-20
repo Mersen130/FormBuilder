@@ -747,9 +747,9 @@
 
             if (options.float){
                 if (options.float) $("#darkOverlay").show();
-                tabWrapper.css({ "width": "50%", "position": "absolute", "z-index": "101", "margin": "0 300px"});
+                tabWrapper.css({ "width": "50%", "position": "relative", "z-index": "101", "margin": "150px 70px"});
             } else{
-                tabWrapper.css({ "width": "50%", "position": "absolute", "z-index": "101"});
+                tabWrapper.css({ "width": "50%", "position": "relative", "z-index": "101"});
             }
             tabAdded.css({
                 "overflow": "hidden",
@@ -1125,8 +1125,6 @@
                 const lineName = `line${i}`;
                 style[lineName].map((element, index) => {
                     if (element.customElementCss){
-                        console.log(element.customElementCss);
-                        console.log(formId + lineName + element.name.split(" ").join("") + index.toString());
                         $(`#${formId + lineName + element.name.split(" ").join("") + index.toString()}`).css(element.customElementCss)
                     }
                 });

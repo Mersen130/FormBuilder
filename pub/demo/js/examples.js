@@ -1,11 +1,63 @@
-const formBuilder = new FormBuilder();
-let formId1 = formBuilder.addGroup("personalInfo");
-// let formId2 = formBuilder.addGroup("login");
-// let formId3 = formBuilder.addGroup("signup");
-// formBuilder.createTabForm({"media": formId1, "login": formId2, "signup1": formId3}, "body", {drag: true, close: true, float: false});
+$("#login").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formBuilder = <span class="hljs-keyword" style="color: rgb(102, 102, 234);">new</span> FormBuilder();
+<span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId1 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"login"</span>, { parentSelector: <span class="hljs-string" style="color: rgb(123, 151, 38);">"#login"</span> });</pre>`)
+$("#signup").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId2 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"signup"</span>, { parentSelector: <span class="hljs-string" style="color: rgb(123, 151, 38);">"#signup"</span> });</pre>`)
+$("#mediapost").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId3 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"mediaPost"</span>, { parentSelector: <span class="hljs-string" style="color: rgb(123, 151, 38);">"#mediapost"</span> });
+</pre>`)
+$("#personalinfo").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId4 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"personalInfo"</span>, { parentSelector: <span class="hljs-string" style="color: rgb(123, 151, 38);">"#personalinfo"</span> });
+</pre>`)
+$("#question").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId5 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"question"</span>, { parentSelector: <span class="hljs-string" style="color: rgb(123, 151, 38);">"#question"</span> });
+</pre>`)
+$("#contactme").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId6 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"contactMe"</span>, { parentSelector: <span class="hljs-string" style="color: rgb(123, 151, 38);">"#contactme"</span> });
+</pre>`)
+$("#concate").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId7 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"login"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
+<span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId8 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"signup"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
+formBuilder.createTabForm({<span class="hljs-string" style="color: rgb(123, 151, 38);">"Login"</span>: formId7, <span class="hljs-string" style="color: rgb(123, 151, 38);">"Sign up"</span>: formId8}, <span class="hljs-string" style="color: rgb(123, 151, 38);">"#concate"</span>);</pre>`)
+$("#draggable").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId9 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"login"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
+<span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId10 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"signup"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
+formBuilder.createTabForm({<span class="hljs-string" style="color: rgb(123, 151, 38);">"Login"</span>: formId9, <span class="hljs-string" style="color: rgb(123, 151, 38);">"Sign up"</span>: formId10}, <span class="hljs-string" style="color: rgb(123, 151, 38);">"#draggable"</span>, {drag: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>, close: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>, float: <span class="hljs-literal" style="color: rgb(223, 83, 32);">false</span>});
+</pre>`)
+$("#closable").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId11 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"login"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
+<span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId12 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"signup"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
+formBuilder.createTabForm({<span class="hljs-string" style="color: rgb(123, 151, 38);">"Login"</span>: formId11, <span class="hljs-string" style="color: rgb(123, 151, 38);">"Sign up"</span>: formId12}, <span class="hljs-string" style="color: rgb(123, 151, 38);">"#closable"</span>, {drag: <span class="hljs-literal" style="color: rgb(223, 83, 32);">false</span>, close: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>, float: <span class="hljs-literal" style="color: rgb(223, 83, 32);">false</span>});
+</pre>`)
+$("#float").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId13 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"login"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
+<span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId14 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"signup"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
+formBuilder.createTabForm({<span class="hljs-string" style="color: rgb(123, 151, 38);">"Login"</span>: formId13, <span class="hljs-string" style="color: rgb(123, 151, 38);">"Sign up"</span>: formId14}, <span class="hljs-string" style="color: rgb(123, 151, 38);">"body"</span>, {drag: <span class="hljs-literal" style="color: rgb(223, 83, 32);">false</span>, close: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>, float: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>});
+<span class="hljs-comment" style="color: rgb(118, 110, 107);">// for your experience, please click the button to run this code snippet</span></pre>`)
+$("#float").append(`<button id='floatBtn' onclick='showFloat()'>Try it >>></button>`)
 
-// let formId4 = formBuilder.addGroup("login");
-// let formId5 = formBuilder.addGroup("signup");
+
+
+
+const formBuilder = new FormBuilder();
+const formId1 = formBuilder.addGroup("login", { parentSelector: "#login" });
+const formId2 = formBuilder.addGroup("signup", { parentSelector: "#signup" });
+const formId3 = formBuilder.addGroup("mediaPost", { parentSelector: "#mediapost" });
+const formId4 = formBuilder.addGroup("personalInfo", { parentSelector: "#personalinfo" });
+const formId5 = formBuilder.addGroup("question", { parentSelector: "#question" });
+const formId6 = formBuilder.addGroup("contactMe", { parentSelector: "#contactme" });
+
+const formId7 = formBuilder.addGroup("login", { customCss: {width: "auto"} });
+const formId8 = formBuilder.addGroup("signup", { customCss: {width: "auto"} });
+formBuilder.createTabForm({"Login": formId7, "Sign up": formId8}, "#concate");
+
+const formId9 = formBuilder.addGroup("login", { customCss: {width: "auto"} });
+const formId10 = formBuilder.addGroup("signup", { customCss: {width: "auto"} });
+formBuilder.createTabForm({"Login": formId9, "Sign up": formId10}, "#draggable", {drag: true, close: true, float: false});
+
+const formId11 = formBuilder.addGroup("login", { customCss: {width: "auto"} });
+const formId12 = formBuilder.addGroup("signup", { customCss: {width: "auto"} });
+formBuilder.createTabForm({"Login": formId11, "Sign up": formId12}, "#closable", {drag: false, close: true, float: false});
+
+function showFloat(){
+    window.open("/demo/float.html");
+}
+
+
+// the following code were used in alpha release
+
+// const formId4 = formBuilder.addGroup("login");
+// const formId5 = formBuilder.addGroup("signup");
 // formBuilder.createTabForm({"login": formId4, "signup1": formId5}, "body", {"drag": true}).addGroup("signup")
 
 /* $(document).ready(()=>{
@@ -27,7 +79,7 @@ $("h2").css({
 $("h2").last().css("left", "500px");
 $("hr").css({
     "position": "relative",
-    "width": "100%",
+    "width": "auto",
 })
 function formatLastCode(){
     $("code").last().css({
@@ -42,9 +94,9 @@ function formatLastCode(){
 }
 
 // #1.1 make a signup form
-let descriotion = "<p>Make a default signup form:<br>Password fields have default input checking</p>"
+const descriotion = "<p>Make a default signup form:<br>Password fields have default input checking</p>"
 const formBuilder = new FormBuilder();
-let formId = formBuilder.addGroup("signup");
+const formId = formBuilder.addGroup("signup");
 formBuilder.selectForm(formId).css({"position": "relative", "left": "250px"});
 $(`#${formId}Div`).append(`<code>${descriotion}1: const formBuilder = new FormBuilder();<br>2: const formId = formBuilder.addGroup(\"signup\", {});</code>`).css( {"position": "relative"});
 formatLastCode();
@@ -60,11 +112,11 @@ formatLastCode();
 
 body.append("<hr>")
 
-// #2 delete line 2
-descriotion = "<p>Delete line 2:</p>"
+// #2 deconste line 2
+descriotion = "<p>Deconste line 2:</p>"
 formId = formBuilder.addGroup("signup", {});
-formBuilder.deleteLine(formId, 3).selectForm(formId).css({"position": "relative", "left": "250px"});
-$(`#${formId}Div`).append(`<code>${descriotion}1: formId = formBuilder.addGroup(\"signup\", {});<br>2: formBuilder.deleteLine(formId, 3);</code>`).css( {"position": "relative"});
+formBuilder.deconsteLine(formId, 3).selectForm(formId).css({"position": "relative", "left": "250px"});
+$(`#${formId}Div`).append(`<code>${descriotion}1: formId = formBuilder.addGroup(\"signup\", {});<br>2: formBuilder.deconsteLine(formId, 3);</code>`).css( {"position": "relative"});
 formatLastCode();
 
 body.append("<hr>")
@@ -144,27 +196,27 @@ formatLastCode();
 
 body.append("<hr>")
 
-// #9 delete last form
-descriotion = "<p>delete last form</p>"
+// #9 deconste last form
+descriotion = "<p>deconste last form</p>"
 formId = formBuilder.addGroup("signup", {});
 formBuilder.selectForm(formId).css({"position": "relative", "left": "250px"});
 $(`#${formId}Div`).append(`<code>${descriotion}1: formId = formBuilder.addGroup(\"signup\", {})<br>2: formBuilder.removeForm(formId); <br>(or formBuilder.removeForm(formBuilder.getLastAdded()))`).css( {"position": "relative"});
 formatLastCode();
-body.append("<button id=\"deletelast\">remove last form</button>")
-$("#deletelast").click(function(){
+body.append("<button id=\"deconstelast\">remove last form</button>")
+$("#deconstelast").click(function(){
     formBuilder.removeForm(formId);
     $(this).html(formId + " removed");
 })
 body.append("<hr>")
 
-// #9 delete all
-descriotion = "<p>delete all forms</p>"
+// #9 deconste all
+descriotion = "<p>deconste all forms</p>"
 formId = formBuilder.addGroup("signup", {});
 formBuilder.selectForm(formId).css({"position": "relative", "left": "250px"});
 $(`#${formId}Div`).append(`<code>${descriotion}1: formId = formBuilder.addGroup(\"signup\", {})<br>2: formBuilder.removeAllForm();`).css( {"position": "relative"});
 formatLastCode();
-body.append("<button id=\"deleteall\">remove all forms</button>")
-$("#deleteall").click(function(){
+body.append("<button id=\"deconsteall\">remove all forms</button>")
+$("#deconsteall").click(function(){
     formBuilder.removeAllForm();
     $(this).html("all forms removed");
 })

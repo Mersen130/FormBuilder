@@ -1,5 +1,5 @@
 function gotoDemo(){
-    window.location.href = "demo";
+    window.location.href = "/demo/UseCases.html";
 }
 
 function downloadFormBuilder(){

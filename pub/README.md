@@ -5,7 +5,7 @@
 
 ## install
 ```html
-<script type="text/javascript" src="local location of FormBuilder.js" defer></script>
+<script type="text/javascript" src="location/of/FormBuilder.js" defer></script>
 ```
 
 ## initialize
