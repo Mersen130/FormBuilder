@@ -57,7 +57,9 @@
             fieldset: "login",
             parentSelector: "body",
             class: "",  // customized add-on classname, one can use this to interact with third-party frameworks etc.
-
+            customCss: {
+                "width": "30%",
+            },
 
             line0: [{
                 tag: "input",
@@ -75,7 +77,6 @@
                 placeholder: "please enter your pswd...",  // necessary field
                 value: "",  // default value, necessary field
                 
-                class: "",  // customized add-on classname, one can use this to interact with third-party frameworks etc.
 
                 tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",  // optional field
                 regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),  // optional field
@@ -126,6 +127,8 @@
             customCss: { // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
                 "width": "50%",
             },  
+            class: "",  // customized add-on classname, one can use this to interact with third-party frameworks etc.
+
 
             line0: [{
                 tag: "input",
@@ -137,9 +140,10 @@
             line1: [{
                 tag: "input",  // html tag, necessary field
                 name: "Password", // name for the label, necessary field and please be unique
-                type: "password",  // tag type, necessary field
+                type: "password",  // tag type, optional field
                 placeholder: "please enter your pswd...",  // optional field
                 value: "",  // default value, optional field
+                class: "",  // customized add-on classname, one can use this to interact with third-party frameworks etc.
 
                 tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",  // optional field
                 regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),  // optional field
@@ -154,7 +158,6 @@
                 name: "Confirm\ Password",
                 type: "password",
                 placeholder: "please enter your pswd again...",
-                value: "something...",
                 regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),
                 check: formBuilderHelper.passwordCheck,
             }],
@@ -189,7 +192,192 @@
             useCheck: false,  // whether to use default input sanity check for all elements
 
             parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
-            fieldset: false, // A frame which wraps all elements in this form, set to false if not needed
+            fieldset: "Post", // A frame which wraps all elements in this form, set to false if not needed
+            numLines: 4,  // number of rows in this form
+            customCss: { // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
+                "width": "50%",
+            }, 
+
+            line0: [{
+                tag: "input",
+                name: "Title",
+                type: "text",
+                placeholder: "Enter some descriptions...",
+            }],
+
+            line1: [
+                {
+                    tag: "textarea",
+                    name: "Detail",
+                    attributes: {
+                        rows: "10",
+                        cols: "10",
+                    }
+                }
+            ],
+
+            line2: [
+                {
+                    tag: "input",
+                    name: "upload image",
+                    type: "file",
+                }
+            ],
+
+            line3: [
+                {
+                    tag: "input",
+                    name: "",
+                    type: "submit",
+                }
+            ]
+
+        },
+
+        personalInfoStyle: {
+            useCss: true,  // whether to apply the default css style for every element in this formGroup
+            useLabel: true,  // whether to enable labels for each element
+            useCheck: false,  // whether to use default input sanity check for all elements
+
+            parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
+            fieldset: "Information", // A frame which wraps all elements in this form, set to false if not needed
+            numLines: 10,  // number of rows in this form
+            customCss: { // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
+                "width": "50%",
+            },  
+
+            line0: [
+                {
+                    tag: "input",
+                    name: "First Name",
+                    type: "text",
+                }, {
+                    tag: "input",
+                    name: "Last Name",
+                    type: "text"
+                }
+
+            ],
+            line1: [
+                {
+                    tag: "input",
+                    name: "Address",
+                    type: "text"
+                }
+            ],
+            line2: [
+                {
+                    tag: "input",
+                    name: "City",
+                    type: "text"
+                }, {
+                    tag: "input",
+                    name: "Prov.",
+                    type: "text"
+                }, {
+                    tag: "input",
+                    name: "Country",
+                    type: "text"
+                }, {
+                    tag: "input",
+                    type: "text",
+                    name: "Postal Code",
+                    placeholder: "XXX XXX"
+                }
+            ],
+            line3: [
+                {
+                    tag: "input",
+                    type: "date",
+                    name: "Birthday",
+                }, {
+                    tag: "select",
+                    name: "Gender",
+                    options: [ "Others", "Male", "Female"]
+                }
+            ],
+            line4: [
+                {
+                    tag: "input",
+                    type: "email",
+                    name: "Email",
+                    placeholder: "example@example.com"
+                }
+            ],
+            line5: [
+                {
+                    name: "Credit/Debit/Visa",
+                    tag: "input",
+                    type: "text",
+                    placeholder: "XXXX"
+                }, {
+                    tag: "input",
+                    type: "text",
+                    name: "",
+                    placeholder: "XXXX"
+                }, {
+                    tag: "input",
+                    type: "text",
+                    name: "",
+                    placeholder: "XXXX"
+                }, {
+                    tag: "input",
+                    name: "",
+                    type: "text",
+                    placeholder: "XXXX"
+                },
+            ], 
+            line6: [
+                {
+                    tag: "input",
+                    name: "Expires",
+                    type: "text",
+                    placeholder: "MM/YY"
+                }, {
+                    tag: "input",
+                    name: "CVV",
+                    type: "text",
+                }
+            ],
+            line7: [
+                {
+                    tag: "input",
+                    name: "remember",
+                    type: "checkbox",
+                    tooltip: "please provide your mailing address below if unchecked",
+                    value: "Mailing address is same as the address above",
+                    customElementCss: {
+                        "border": "none",
+                    },
+                    attributes: {
+                      checked: "checked",  
+                    }
+                }
+            ],
+            line8: [
+                {
+                    tag: "input",
+                    type: "text",
+                    name: "Mailing address",
+                    placeholder: "Optional",
+                }
+            ],
+            line9: [
+                {
+                    tag: "input",
+                    name: "",
+                    type: "submit",
+                }
+            ]
+        },
+
+        questionStyle: {
+            useCss: true,  // whether to apply the default css style for every element in this formGroup
+            useLabel: true,  // whether to enable labels for each element
+            useCheck: false,  // whether to use default input sanity check for all elements
+
+            parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
+            fieldset: "Question", // A frame which wraps all elements in this form, set to false if not needed
             numLines: 5,  // number of rows in this form
             customCss: { // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
                 "width": "50%",
@@ -200,7 +388,6 @@
                 name: "Summary",
                 type: "text",
                 placeholder: "Enter a one line summary...",
-                value: "",
             }],
             line1: [{
                 tag: "input",
@@ -248,24 +435,63 @@
                 tag: "input",
                 name: "",
                 type: "submit",
-                placeholder: "",
                 value: "Post My Question!",
             }]
         },
 
-        replyPostStyle: {
-
-        },
-
-        followUpStyle: {
-
-        },
-
-        questionStyle: {
-
-        },
-
         contactMeStyle: {
+            useCss: true, // whether to apply the default css style for every element in this formGroup
+            useLabel: true,  // whether to enable labels for each element
+            useCheck: false,  // whether to use default input sanity check for all elements
+
+            parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
+            fieldset: "Contact Me", // A frame which wraps all elements in this form, set to false if not needed
+            numLines: 4,  // number of rows in this form
+            customCss: { // an object of css style, custom css always takes precedence, this key is for the <form> tag of this particular formGroup. customCss can take effect while useCss is set to true.
+                "width": "50%",
+            }, 
+
+            line0: [{
+                tag: "input",
+                name: "Name",
+                type: "text",
+                placeholder: "Enter your name...",
+            }],
+
+            line1: [
+                {
+                    tag: "input",
+                    name: "Email",
+                    type: "email",
+                    placeholder: "example@example.com"
+                },
+                {
+                    tag: "input",
+                    type: "text",
+                    name: "Phone",
+                    placeholder: "xxx-xxx-xxxx",
+                }
+            ],
+            line2: [
+                {
+                    tag: "textarea",
+                    name: "Detail",
+                    placeholder: "Issue you want to address...",
+                    attributes: {
+                        rows: "10",
+                        cols: "10",
+                    }
+                }
+            ],
+
+            line3: [
+                {
+                    tag: "input",
+                    name: "",
+                    type: "submit",
+                }
+            ]
+
 
         },
 
@@ -449,7 +675,6 @@
             const builtinStyle = eval("formBuilderHelper." + type + "Style");
             let temp = {};
             if (!builtinStyle) { // init a completely customized form
-                temp = initEmptyStyle(); // todo
                 formBuilderHelper.mergeStyle(temp, style)
             } else {
                 if (jQuery.isEmptyObject(style)) {
@@ -900,6 +1125,8 @@
                 const lineName = `line${i}`;
                 style[lineName].map((element, index) => {
                     if (element.customElementCss){
+                        console.log(element.customElementCss);
+                        console.log(formId + lineName + element.name.split(" ").join("") + index.toString());
                         $(`#${formId + lineName + element.name.split(" ").join("") + index.toString()}`).css(element.customElementCss)
                     }
                 });
@@ -1061,7 +1288,7 @@
             for (const attr in line.attributes) {
                 attributes += attr + "='" + line.attributes[attr] + "' ";
             }
-            let tag = `<select ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()} ' class='${formId}Input ${formId + lineName} ${line.class? line.class : ""}' ${attributes}>`
+            let tag = `<select ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}' class='${formId}Input ${formId + lineName} ${line.class? line.class : ""}' ${attributes}>`
             tag += line.options.slice(1).reduce((accum, val) =>
                 accum + `<option value="${val}">${val}</option>`, `<option value="${line.options[0]}">${line.options[0]}</option>`
             );
@@ -1076,12 +1303,12 @@
             }
             let tag;
             if (line.type === "submit") {
-                tag = `<${line.tag} class='${formId}Submit ${line.class? line.class : ""}' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()} ' type='submit' ${attributes} ${line.value? "value='" + line.value + "'" : ""}>`
+                tag = `<${line.tag} class='${formId}Submit ${line.class? line.class : ""}' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}' type='submit' ${attributes} ${line.value? "value='" + line.value + "'" : ""}>`
 
             } else if (line.type === "checkbox" || line.type === "radio") {
-                tag = `<div class='${formId}Input ${formId + lineName} ${line.class? line.class : ""}' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()} '> <${line.tag} ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
+                tag = `<div class='${formId}Input ${formId + lineName} ${line.class? line.class : ""}' id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}'> <${line.tag} ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
             } else {
-                tag = `<${line.tag} class='${formId}Input ${formId + lineName} ${line.class? line.class : ""}' ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()} ' ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
+                tag = `<${line.tag} class='${formId}Input ${formId + lineName} ${line.class? line.class : ""}' ${line.type? ("type='" + line.type + "'") : ""} ${line.placeholder ? ("placeholder='" + line.placeholder + "'") : ""} id='${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}' ${line.name ? "name='" + line.name.split(" ").join("") + "'" : ""} ${attributes} ${line.value ? "value='" + line.value + "'" : ""}>${line.elementContent? line.elementContent : ""}</${line.tag}>`
             }
             if (line.type === "checkbox" || line.type === "radio") {
                 tag += `<label for=${formId + lineName + line.name.split(" ").join("") + elementIndex.toString()}>${line.value}</label></div>`

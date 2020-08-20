@@ -38,6 +38,8 @@ All of the fields in the object below are corresponding to what is displayed in 
             useLabel: true,  // whether to enable labels for each element
             useCheck: true,  // whether to use default input sanity check for all elements
 
+            class: "",  // customized add-on classname, one can use this to interact with third-party frameworks etc.
+
             parentSelector: "body", // a jquery css selector, represents the parent of this formGroup, default to "body"
             fieldset: "Signup Form", // A frame which wraps all elements in this form, set to false if not needed
             numLines: 5,  // number of rows in this form
@@ -54,16 +56,22 @@ All of the fields in the object below are corresponding to what is displayed in 
             }],
             line1: [{
                 tag: "input",  // html tag, necessary field
-                name: "Password", // name for the label, necessary field and please be unique
-                type: "password",  // tag type, necessary field
+                name: "Password", // name for the label, necessary field and please be unique, leave it as an empty string if you don't want any label.
+                type: "password",  // tag type, optional field
 
                 placeholder: "please enter your pswd...",  // optional field
                 value: "",  // default value, optional field
                 elementContent: "",  // optional, text displayed between tags, for example, <p>elementContent</p>
+                attributes: {
+                    // optional, other attributes of the element, e.g. { row: "20", col: "50" }
+                },
+                class: "",  // customized add-on classname, one can use this to interact with third-party frameworks etc.
+
 
                 tooltip: "6-18 characters, 1 lowercase letter, 1 uppercase letter, 1 numeric character",  // optional field
                 regex: new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,16})"),  // optional field
-                check: formBuilderHelper.passwordCheck,  // input sanity check, can be disabled by setting useCheck to false, optional field, optional field
+                check: formBuilderHelper.passwordCheck,  // input sanity check, can be disabled by setting useCheck to false, optional field
+
                 on: false,  // a list of events that listens to, parallel list with "callbacks", optional field, e.g. ["click", "change"]
                 callbacks: [],  // a list of functions that execute when events are triggered, parallel list with "on", optional field, e.g. [f1, f2]
                 customElementCss: {  // customized css style for this particular element, do not set width in this object! this css takes precedence to the default css, optional field.
@@ -82,14 +90,10 @@ All of the fields in the object below are corresponding to what is displayed in 
                 tag: "input",
                 name: "Birthday",
                 type: "date",
-                placeholder: "",
-                value: "",
             }],
             line4: [{
                 tag: "input",
-                name: "",
                 type: "submit",
-                placeholder: "",
                 value: "Create Account",
             }]
         },
@@ -107,7 +111,7 @@ All of the fields in the object below are corresponding to what is displayed in 
 
 ### FormBuilder.addGroup(type, style = {}):
 * `Description`: add a form to the window. If `type` provided is not recongnizable, `type` is treated as a custom type. Returns `formId` of this form (a string)
-* `type`: **String**, a one word desriprion of the new form. This library provides default layouts for `login`, `signup`, `mediaPost`, `replyPost`, `followUp`, `question`, `contactMe`. More types coming soon...
+* `type`: **String**, a one word desriprion of the new form. This library provides default layouts for `login`, `signup`, `mediaPost`, `personalInfo`, `question`, `contactMe`. More types coming soon...
 * `style`: **Object** [see here](#object-example)
 * `return`: **String**, a unique formId for the newly created form, this formId can be used as an arguments for other methods of this library.
 * example:
