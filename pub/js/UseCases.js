@@ -11,15 +11,16 @@ $("#contactme").append(`<pre class="hljs" style="display: block; overflow-x: aut
 </pre>`)
 $("#concate").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId7 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"login"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
 <span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId8 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"signup"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
-formBuilder.createTabForm({<span class="hljs-string" style="color: rgb(123, 151, 38);">"Login"</span>: formId7, <span class="hljs-string" style="color: rgb(123, 151, 38);">"Sign up"</span>: formId8}, <span class="hljs-string" style="color: rgb(123, 151, 38);">"#concate"</span>);</pre>`)
+formBuilder.createTabForm({<span class="hljs-string" style="color: rgb(123, 151, 38);">"Login"</span>: formId7, <span class="hljs-string" style="color: rgb(123, 151, 38);">"Sign up"</span>: formId8}, <span class="hljs-string" style="color: rgb(123, 151, 38);">"#concate"</span>);
+<span class="hljs-comment" style="color: rgb(118, 110, 107);">// for your experience, please click the button to run this code snippet</span></pre>`).append(`<button id='floatBtn' onclick='showConcate()'>Try it >>></button>`)
 $("#draggable").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId9 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"login"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
 <span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId10 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"signup"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
 formBuilder.createTabForm({<span class="hljs-string" style="color: rgb(123, 151, 38);">"Login"</span>: formId9, <span class="hljs-string" style="color: rgb(123, 151, 38);">"Sign up"</span>: formId10}, <span class="hljs-string" style="color: rgb(123, 151, 38);">"#draggable"</span>, {drag: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>, close: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>, float: <span class="hljs-literal" style="color: rgb(223, 83, 32);">false</span>});
-</pre>`)
+<span class="hljs-comment" style="color: rgb(118, 110, 107);">// for your experience, please click the button to run this code snippet</span></pre>`).append(`<button id='floatBtn' onclick='showDrag()'>Try it >>></button>`)
 $("#closable").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId11 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"login"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
 <span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId12 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"signup"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
 formBuilder.createTabForm({<span class="hljs-string" style="color: rgb(123, 151, 38);">"Login"</span>: formId11, <span class="hljs-string" style="color: rgb(123, 151, 38);">"Sign up"</span>: formId12}, <span class="hljs-string" style="color: rgb(123, 151, 38);">"#closable"</span>, {drag: <span class="hljs-literal" style="color: rgb(223, 83, 32);">false</span>, close: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>, float: <span class="hljs-literal" style="color: rgb(223, 83, 32);">false</span>});
-</pre>`)
+<span class="hljs-comment" style="color: rgb(118, 110, 107);">// for your experience, please click the button to run this code snippet</span></pre>`).append(`<button id='floatBtn' onclick='showClose()'>Try it >>></button>`)
 $("#float").append(`<pre class="hljs" style="display: block; overflow-x: auto; background: rgb(241, 239, 238); color: rgb(104, 97, 94); padding: 0.5em;"><span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId13 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"login"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
 <span class="hljs-keyword" style="color: rgb(102, 102, 234);">const</span> formId14 = formBuilder.addGroup(<span class="hljs-string" style="color: rgb(123, 151, 38);">"signup"</span>, { customCss: {width: <span class="hljs-string" style="color: rgb(123, 151, 38);">"auto"</span>} });
 formBuilder.createTabForm({<span class="hljs-string" style="color: rgb(123, 151, 38);">"Login"</span>: formId13, <span class="hljs-string" style="color: rgb(123, 151, 38);">"Sign up"</span>: formId14}, <span class="hljs-string" style="color: rgb(123, 151, 38);">"body"</span>, {drag: <span class="hljs-literal" style="color: rgb(223, 83, 32);">false</span>, close: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>, float: <span class="hljs-literal" style="color: rgb(223, 83, 32);">true</span>});
@@ -37,20 +38,32 @@ const formId4 = formBuilder.addGroup("personalInfo", { parentSelector: "#persona
 const formId5 = formBuilder.addGroup("question", { parentSelector: "#question" });
 const formId6 = formBuilder.addGroup("contactMe", { parentSelector: "#contactme" });
 
-const formId7 = formBuilder.addGroup("login", { customCss: {width: "auto"} });
-const formId8 = formBuilder.addGroup("signup", { customCss: {width: "auto"} });
-formBuilder.createTabForm({"Login": formId7, "Sign up": formId8}, "#concate");
-
-const formId9 = formBuilder.addGroup("login", { customCss: {width: "auto"} });
-const formId10 = formBuilder.addGroup("signup", { customCss: {width: "auto"} });
-formBuilder.createTabForm({"Login": formId9, "Sign up": formId10}, "#draggable", {drag: true, close: true, float: false});
-
-const formId11 = formBuilder.addGroup("login", { customCss: {width: "auto"} });
-const formId12 = formBuilder.addGroup("signup", { customCss: {width: "auto"} });
-formBuilder.createTabForm({"Login": formId11, "Sign up": formId12}, "#closable", {drag: false, close: true, float: false});
-
 function showFloat(){
-    window.open("/demo/float.html");
+    const newWin = window.open("/demo/tabForms.html");
+    newWin.onload = function (){
+        newWin.window.showFloat();
+    };
+}
+
+function showDrag(){
+    const newWin = window.open("/demo/tabForms.html");
+    newWin.onload = function (){
+        newWin.window.showDrag();
+    };
+}
+
+function showConcate(){
+    const newWin = window.open("/demo/tabForms.html");
+    newWin.onload = function (){
+        newWin.window.showConcate();
+    };
+}
+
+function showClose(){
+    const newWin = window.open("/demo/tabForms.html");
+    newWin.onload = function (){
+        newWin.window.showClose();
+    };
 }
 
 

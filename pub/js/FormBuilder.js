@@ -527,7 +527,7 @@
          * @param {String} lineName 
          */
         addTooltipCss: function(formId, lineName) {
-            $(`.tooltip${formId + lineName}`).css("position", "relative");
+            $(`.tooltip${formId + lineName}`).css({"position": "relative", "display": "inline"});
             $(`.tooltip${formId + lineName} .tooltiptext${formId + lineName}`).css({
                 "visibility": "hidden",
                 "width": "120px",
@@ -747,9 +747,9 @@
 
             if (options.float){
                 if (options.float) $("#darkOverlay").show();
-                tabWrapper.css({ "width": "50%", "position": "relative", "z-index": "101", "margin": "150px 70px"});
+                tabWrapper.css({ "width": "50%", "position": "absolute", "z-index": "101", "margin": "150px 70px"});
             } else{
-                tabWrapper.css({ "width": "50%", "position": "relative", "z-index": "101"});
+                tabWrapper.css({ "width": "50%", "position": "absolute", "z-index": "101"});
             }
             tabAdded.css({
                 "overflow": "hidden",
@@ -975,7 +975,7 @@
                 return this;
             }
             form.appendElementAtLine(lineNum, elementStyle);
-            thie.rerender(formId);
+            this.rerender(formId);
             return this;
         },
 
@@ -1179,12 +1179,12 @@
 
         appendElementAtLine: function (lineNum, elementStyle) {
             const lineArray = this.style[`line${lineNum}`];
-            lineArray.append(elementStyle);
+            lineArray.push(elementStyle);
         },
 
         insertElementAtLine: function (lineNum, elementNum, elementStyle) {
             const lineArray = this.style[`line${lineNum}`];
-            lineArray.splice(lineNum, 0, elementStyle);
+            lineArray.splice(elementNum, 0, elementStyle);
         },
 
         deleteElementAtLine: function (lineNum, elementNum) {
@@ -1193,9 +1193,9 @@
         },
 
         setElementPropertiesAtLine: function (style, lineNum, elementNum) {
-            if (!elementNum) {
+            if (elementNum == undefined) {
                 elementNum = []
-                for (var i = 0; i < this.style[`line${lineNum}`]; i++) {
+                for (var i = 0; i < this.style[`line${lineNum}`].length; i++) {
                     elementNum.push(i);
                 }
             }
@@ -1232,7 +1232,7 @@
                 lineLabel.not(':last').css("margin-right", `${line.length / (line.length - 1)}%`);
             }
 
-            // create elements
+                // create elements
             line.map((element, index) => {
                 let tag;
                 if (element.tag === "select") {
@@ -1267,6 +1267,7 @@
             let width = 100;
             if (line.length > 1) {
                 width = 100 / line.length - 1;
+                // $(`.tooltip${formId + lineName}`).css({ "width": `${width}%`});
                 lineInput.css({ "width": `${width}%`, "display": "inline-block" });
                 lineInput.not(':last').css("margin-right", `${line.length / (line.length - 1)}%`);
             } else {
@@ -1314,7 +1315,6 @@
             if (line.tooltip) {
                 tag = `<div class=${"tooltip" + formId + lineName}>` + tag + `<span class="tooltiptext${formId + lineName}">${line.tooltip}</span></div>`
             }
-            // log(tag);
             return tag;
         },
 

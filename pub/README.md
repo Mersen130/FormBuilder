@@ -5,6 +5,7 @@
 
 ## install
 ```html
+<script src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
 <script type="text/javascript" src="location/of/FormBuilder.js" defer></script>
 ```
 
@@ -120,6 +121,7 @@ const formId1 = formBuilder.addGroup("login");
 const formId2 = formBuilder.addGroup("login", {useCss: false});  // disable the css styling for the new form
 ```
 
+<button id="addGroup" class="tryItBtn">Try it >>></button>
 
 ----
 
@@ -133,23 +135,29 @@ const formId2 = formBuilder.addGroup("login", {useCss: false});  // disable the 
 * example:
 
 ```javascript
-const formBuilder = new FormBuilder();
-let formId1 = formBuilder.addGroup("mediaPost", {"width": "100%"});
-let formId2 = formBuilder.addGroup("login", {"width": "100%"});
-let formId3 = formBuilder.addGroup("signup", {"width": "100%"});
-formBuilder.createTabForm({"media": formId1, 
-                            "login": formId2, 
-                            "signup1": formId3
+// example1:
+const formId1 = formBuilder.addGroup("question", { customCss: { width: "auto" } });
+const formId2 = formBuilder.addGroup("contactMe", { customCss: { width: "auto" } });
+const formId3 = formBuilder.addGroup("mediaPost", { customCss: { width: "auto" } });
+formBuilder.createTabForm({"Question": formId1, 
+                            "Contact Me": formId2, 
+                            "Media(Drag Here)": formId3
                         }, "body", {drag: true, close: true, float: false});
 // combine formId1, 2, 3 together, draggable, closable
 
-let formId4 = formBuilder.addGroup("login", {"width": "100%"});
-let formId5 = formBuilder.addGroup("signup", {"width": "100%"});
+// example2:
+const formId4 = formBuilder.addGroup("login", { customCss: { width: "auto" } });
+const formId5 = formBuilder.addGroup("signup", { customCss: { width: "auto" } });
 formBuilder.createTabForm({"login": formId4, 
                             "signup1": formId5
                         }, "body", {"float": true, "close": true});
 // combine formId4, 5 together, floating, closable
 ```
+
+<button id="createTabForm1" class="tryItBtn">Try example1 >>></button>
+
+
+<button id="createTabForm2" class="tryItBtn">Try example2 >>></button>
 
 
 ----
@@ -165,8 +173,10 @@ formBuilder.createTabForm({"login": formId4,
 
 ```javascript
 const formId1 = formBuilder.addGroup("login");
-console.log(formId1 === formBuilder.getLastAdded());  // true
+alert(formId1 === formBuilder.getLastAdded());  // true
 ```
+
+<button id="getLastAdded" class="tryItBtn">Try It >>></button>
 
 ----
 
@@ -179,8 +189,11 @@ console.log(formId1 === formBuilder.getLastAdded());  // true
 
 ```javascript
 const formId1 = formBuilder.addGroup("login");
-console.log(formBuilder.getInput(formId1));  // [undefined, undefined, undefined], assume no user input
+alert(formBuilder.getInput(formId1));  // empty string, sinxe no user input
 ```
+
+<button id="getInput" class="tryItBtn">Try It >>></button>
+
 
 ----
 
@@ -193,6 +206,8 @@ console.log(formBuilder.getInput(formId1));  // [undefined, undefined, undefined
 const formId1 = formBuilder.addGroup("login");
 console.log(formBuilder.getStyle(formId1));
 ```
+
+<button id="getStyle" class="tryItBtn">Try It >>></button>
 
 ----
 
@@ -207,6 +222,9 @@ console.log(formBuilder.getStyle(formId1));
 const formId1 = formBuilder.addGroup("login");
 formBuilder.selectForm(formId1).css( "width", "200%" );  // set formId1's width to 200%
 ```
+
+<button id="selectForm" class="tryItBtn">Try It >>></button>
+
 
 ----
 
@@ -223,7 +241,11 @@ formBuilder.selectForm(formId1).css( "width", "200%" );  // set formId1's width 
 const formId1 = formBuilder.addGroup("login");
 const formId2 = formBuilder.rerender(formId1);
 // rerender formId1;
+// this method doesn't have any visual effect
 ```
+
+<button id="rerender" class="tryItBtn">Try It >>></button>
+
 
 ----
 
@@ -248,6 +270,9 @@ const formId2 = formBuilder.appendLine(formId1, newSubmitButton);
 // append a submit button at the end of formId1
 ```
 
+<button id="appendLine" class="tryItBtn">Try It >>></button>
+
+
 ----
 
 
@@ -263,7 +288,7 @@ const formId2 = formBuilder.appendLine(formId1, newSubmitButton);
 const newEmailInput = [{
     name: "Email",
     tag: "input",
-    type: "text",
+    type: "email",
     placeholder: "123456@example.com",
     value: "",
 }]
@@ -271,6 +296,9 @@ const formId1 = formBuilder.addGroup("login");
 formBuilder.insertLine(formId1, 1, newEmailInput);
 // insert an email field at the line2 of formId1
 ```
+
+<button id="insertLine" class="tryItBtn">Try It >>></button>
+
 
 ----
 
@@ -287,7 +315,7 @@ formBuilder.insertLine(formId1, 1, newEmailInput);
 const newEmailInput = {
     name: "Email",
     tag: "input",
-    type: "text",
+    type: "email",
     placeholder: "123456@example.com",
     value: "",
 }
@@ -295,6 +323,9 @@ const formId1 = formBuilder.addGroup("login");
 formBuilder.appendElementAtLine(formId1, 1, newEmailInput);
 // add an email field at the end of line1 of formId1
 ```
+
+<button id="appendElementAtLine" class="tryItBtn">Try It >>></button>
+
 
 ----
 
@@ -312,7 +343,7 @@ formBuilder.appendElementAtLine(formId1, 1, newEmailInput);
 const newEmailInput = {
     name: "Email",
     tag: "input",
-    type: "text",
+    type: "email",
     placeholder: "123456@example.com",
     value: "",
 }
@@ -320,6 +351,8 @@ const formId1 = formBuilder.addGroup("login");
 formBuilder.insertElementAtLine(formId1, 1, 0, newEmailInput);
 // add an email field at the begining of line1 of formId1
 ```
+
+<button id="insertElementAtLine" class="tryItBtn">Try It >>></button>
 
 
 ----
@@ -342,6 +375,8 @@ formBuilder.setElementPropertiesAtLine(formId1, {"name": "Email", "type": "email
 // set elements' names in line0 to "Email" and tag to "email"
 ```
 
+<button id="setElementPropertiesAtLine" class="tryItBtn">Try It >>></button>
+
 
 ----
 
@@ -360,6 +395,9 @@ formBuilder.changeParent(formId1, "#hippo"); // formId1 is now a children of #hi
 ```
 
 
+<button id="changeParent" class="tryItBtn">Try It >>></button>
+
+
 ----
 
 
@@ -375,12 +413,15 @@ formBuilder.changeParent(formId1, "#hippo"); // formId1 is now a children of #hi
 
 ```javascript
 const callback = () => {
-    alert(formBuilder.getInput(formId));
+    alert(formBuilder.getInput(formId1));
 }
 const formId1 = formBuilder.addGroup("login");
 formBuilder.onEvent(formId1, 0, 0, "change", callback).onEvent(formId1, 1, 0, "change", callback);
 // alert when inputs are typed in line 0 and line 1.
 ```
+
+<button id="onEvent" class="tryItBtn">Try It >>></button>
+
 
 ----
 
@@ -396,8 +437,11 @@ formBuilder.onEvent(formId1, 0, 0, "change", callback).onEvent(formId1, 1, 0, "c
 ```javascript
 const formId1 = formBuilder.addGroup("login");
 const formId2 = formBuilder.removeForm(formId1).addGroup("signup");
-// remove formId1
+// remove formId1 and add signup form
 ```
+
+<button id="removeForm" class="tryItBtn">Try It >>></button>
+
 
 ----
 
@@ -415,6 +459,9 @@ formBuilder.deleteLine(formId1, 1);
 // delete formId's line 1
 ```
 
+<button id="deleteLine" class="tryItBtn">Try It >>></button>
+
+
 ----
 
 
@@ -429,20 +476,18 @@ formBuilder.deleteLine(formId1, 1);
 * example:
 
 ```javascript
-const formId1 = formBuilder.addGroup("login");
-formBuilder.deleteElementAtLine(formId1, 1, 0);
-// delete the first element at line 1
+const formId1 = formBuilder.addGroup("personalInfo");
+formBuilder.deleteElementAtLine(formId1, 3, 0);
+// delete the first element at line 3
 ```
+
+<button id="deleteElementAtLine" class="tryItBtn">Try It >>></button>
+
 
 ----
 
 
-<!--
-* `Description`: 
-* `type`: 
-* `style`:
-* `return`:
-* example:
-```javascript
-```
--->
+# End of documentation
+
+
+----
